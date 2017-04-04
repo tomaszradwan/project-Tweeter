@@ -138,15 +138,15 @@ class User {
 }
 
 $nowy = new User;
-$nowy->setUserName('tomek2');
-$nowy->setPassword('tomek12');
-$nowy->setEmail('radwan.tomassz2@gmail.com');
+$nowy->setUserName('tomek');
+$nowy->setPassword('pass123');
+$nowy->setEmail('tomek@tomek.pl');
 $nowy->saveToDB();
 
 $test = new User;
 $test->setUserName('radwan');
-$test->setPassword('tomeffk12');
-$test->setEmail('radwan.tomdddassz2@gmail.com');
+$test->setPassword('123pass');
+$test->setEmail('radwan@radwan.pl');
 $test->saveToDB();
 
 
