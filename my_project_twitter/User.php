@@ -41,7 +41,7 @@ class User {
         if ($this->id == -1) {
 
             $sql = "INSERT INTO users(username, email, hashed_password) VALUES ('$this->username', '$this->email', '$this->hashedPassword')";
-            $result = $connection->connection->query($sql);
+            $result = $connection->querySql($sql);
 
             if ($result == true) {
                 $this->id = $connection->connection->insert_id;
@@ -96,6 +96,45 @@ class User {
         return $ret;
     }
 
+    public function delete($id, $pass) {
+
+        $connection = new Database;
+
+        if ($id > 0 && $this->pass_verify($id, $pass) === true) {
+
+            $sql = "DELETE FROM users WHERE id=$id";
+            $result = $connection->connection->query($sql);
+
+            if ($result) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    protected function pass_verify($id, $pass) {
+
+        $connection = new Database();
+
+        $sql = "SELECT hashed_password FROM users WHERE id=$id";
+        $result = $connection->querySql($sql);
+
+        while ($row = $result->fetch_row()) {
+            if ($score = $row[0]) {
+                $score = $row[0];
+            } else {
+                return false;
+            }
+        }
+
+        if (password_verify($pass, $score)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
 
 $nowy = new User;
@@ -104,8 +143,15 @@ $nowy->setPassword('tomek12');
 $nowy->setEmail('radwan.tomassz2@gmail.com');
 $nowy->saveToDB();
 
+$test = new User;
+$test->setUserName('radwan');
+$test->setPassword('tomeffk12');
+$test->setEmail('radwan.tomdddassz2@gmail.com');
+$test->saveToDB();
 
 
-//var_dump(User::loadUserById(56));
-var_dump(User::loadAllUsers());
-//var_dump($nowy);
+//echo $nowy->pass_verify(171, 'tomeffk12');
+//echo $nowy->delete(265, 'tomeffk12');
+//var_dump(User::loadUserById(33));
+//var_dump(User::loadAllUsers());
+
