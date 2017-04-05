@@ -55,6 +55,8 @@ class User {
 
         $connection = new Database;
 
+        $id = $connection->connection->real_escape_string($id);
+
         $sql = "SELECT * FROM users WHERE id=$id";
 
         $result = $connection->connection->query($sql);
@@ -100,16 +102,18 @@ class User {
 
         $connection = new Database;
 
-        if ($id > 0 && $this->pass_verify($id, $pass) === true) {
+        if ($id > 0 && $this->pass_verify($id, $pass) == true) {
 
-            $sql = "DELETE FROM users WHERE id=$id";
-            $result = $connection->connection->query($sql);
+            $sql = $connection->connection->prepare("DELETE FROM users WHERE id= ?");
 
-            if ($result) {
-                return true;
+            if ($sql == true) {
+                $sql->bind_param('i', $id);
+                $sql->execute();
             } else {
-                return false;
+                echo $connection->connection->error . "nie ok \n";
             }
+        } else {
+            return false;
         }
     }
 
@@ -117,19 +121,21 @@ class User {
 
         $connection = new Database();
 
+        $id = $connection->connection->real_escape_string($id);
+
         $sql = "SELECT hashed_password FROM users WHERE id=$id";
         $result = $connection->querySql($sql);
+
+        $score = null;
 
         while ($row = $result->fetch_row()) {
             if ($score = $row[0]) {
                 $score = $row[0];
-            } else {
-                return false;
             }
         }
 
-        if (password_verify($pass, $score)) {
-            return true;
+        if ($score != null) {
+            return password_verify($pass, $score);
         } else {
             return false;
         }
@@ -142,6 +148,7 @@ $nowy->setUserName('tomek');
 $nowy->setPassword('pass123');
 $nowy->setEmail('tomek@tomek.pl');
 $nowy->saveToDB();
+$nowy->delete(403, 'pass123');
 
 $test = new User;
 $test->setUserName('radwan');
@@ -150,8 +157,6 @@ $test->setEmail('radwan@radwan.pl');
 $test->saveToDB();
 
 
-//echo $nowy->pass_verify(171, 'tomeffk12');
-//echo $nowy->delete(265, 'tomeffk12');
-//var_dump(User::loadUserById(33));
+var_dump(User::loadUserById(437));
 //var_dump(User::loadAllUsers());
 
