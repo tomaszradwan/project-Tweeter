@@ -1,6 +1,6 @@
 <?php
 
-include 'Database.php';
+include_once 'Connection.php';
 
 class User {
 
@@ -30,21 +30,22 @@ class User {
         $this->email = $email;
     }
 
-    public function getID() {
+    public function getId() {
         return $this->id;
     }
 
     public function saveToDB() {
 
-        $connection = new Database;
+        $connection = new Connection();
 
         if ($this->id == -1) {
 
-            $sql = "INSERT INTO users(username, email, hashed_password) VALUES ('$this->username', '$this->email', '$this->hashedPassword')";
+            $sql = "INSERT INTO `Users`(`username`, `email`, `hashed_password`) VALUES ('$this->username', '$this->email', '$this->hashedPassword')";
             $result = $connection->querySql($sql);
 
             if ($result == true) {
-                $this->id = $connection->connection->insert_id;
+
+                $this->id = $connection->conn->insert_id;
                 return true;
             }
         }
@@ -53,13 +54,13 @@ class User {
 
     static public function loadUserById($id) {
 
-        $connection = new Database;
+        $connection = new Connection();
 
-        $id = $connection->connection->real_escape_string($id);
+        $id = $connection->conn->real_escape_string($id);
 
-        $sql = "SELECT * FROM users WHERE id=$id";
+        $sql = "SELECT * FROM Users WHERE id=$id";
 
-        $result = $connection->connection->query($sql);
+        $result = $connection->conn->query($sql);
 
 
         if ($result == true && $result->num_rows == 1) {
@@ -76,13 +77,13 @@ class User {
 
     static public function loadAllUsers() {
 
-        $connection = new Database;
+        $connection = new Connection();
 
-        $sql = "SELECT * FROM users";
+        $sql = "SELECT * FROM Users";
 
         $ret = [];
 
-        $result = $connection->connection->query($sql);
+        $result = $connection->conn->query($sql);
 
         if ($result == true && $result->num_rows != 0) {
             foreach ($result as $row) {
@@ -100,17 +101,17 @@ class User {
 
     public function delete($id, $pass) {
 
-        $connection = new Database;
+        $connection = new Connection();
 
         if ($id > 0 && $this->pass_verify($id, $pass) == true) {
 
-            $sql = $connection->connection->prepare("DELETE FROM users WHERE id= ?");
+            $sql = $connection->conn->prepare("DELETE FROM Users WHERE id= ?");
 
             if ($sql == true) {
                 $sql->bind_param('i', $id);
                 $sql->execute();
             } else {
-                echo $connection->connection->error . "nie ok \n";
+                echo $connection->conn->error;
             }
         } else {
             return false;
@@ -119,11 +120,11 @@ class User {
 
     protected function pass_verify($id, $pass) {
 
-        $connection = new Database();
+        $connection = new Connection();
 
-        $id = $connection->connection->real_escape_string($id);
+        $id = $connection->conn->real_escape_string($id);
 
-        $sql = "SELECT hashed_password FROM users WHERE id=$id";
+        $sql = "SELECT hashed_password FROM Users WHERE id=$id";
         $result = $connection->querySql($sql);
 
         $score = null;
@@ -142,21 +143,3 @@ class User {
     }
 
 }
-
-$nowy = new User;
-$nowy->setUserName('tomek');
-$nowy->setPassword('pass123');
-$nowy->setEmail('tomek@tomek.pl');
-$nowy->saveToDB();
-$nowy->delete(403, 'pass123');
-
-$test = new User;
-$test->setUserName('radwan');
-$test->setPassword('123pass');
-$test->setEmail('radwan@radwan.pl');
-$test->saveToDB();
-
-
-var_dump(User::loadUserById(437));
-//var_dump(User::loadAllUsers());
-
