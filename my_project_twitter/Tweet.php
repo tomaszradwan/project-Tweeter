@@ -40,16 +40,15 @@ class Tweet {
         $this->creationDate = "";
     }
 
-    static public function loadTweetById($id) {
+    static public function loadTweetById($idTweet) {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string($id);
+        $id = $connection->conn->real_escape_string($idTweet);
 
         $sql = "SELECT * FROM Tweets WHERE id=$id";
 
         $result = $connection->conn->query($sql);
-
 
         if ($result == true && $result->num_rows == 1) {
             $row = $result->fetch_assoc();
@@ -61,6 +60,32 @@ class Tweet {
             return $loadedTweet;
         }
         return null;
+    }
+
+    static public function loadAllTweetsByUserId($idUser) {
+
+        $connection = new Connection();
+        $id = $connection->conn->real_escape_string($idUser);
+
+        $sql = "SELECT * FROM `Tweets` WHERE userId=$id";
+
+        $allTweets = array();
+
+        $result = $connection->conn->query($sql);
+//        var_dump($result);
+        if ($result == true && $result->num_rows != 0) {
+
+            foreach ($result as $row) {
+                $loadedUserTweet = new Tweet();
+                $loadedUserTweet->id = $row['id'];
+                $loadedUserTweet->userId = $row['userId'];
+                $loadedUserTweet->text = $row['text'];
+                $loadedUserTweet->creationDate = $row['creationDate'];
+
+                $allTweets[] = $loadedUserTweet;
+            }
+        }
+        return $allTweets;
     }
 
     static public function loadAllTweets() {
@@ -103,6 +128,15 @@ class Tweet {
             }
         }
         return false;
+    }
+
+    public function deleteTweet($id) {
+
+        $conection = new Connection();
+
+        $stmt = $conection->conn->prepare("DELETE FROM Tweets WHERE id = ?");
+        $stmt->bind_param("i", $id);
+        $stmt->execute();
     }
 
 }
