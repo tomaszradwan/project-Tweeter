@@ -4,6 +4,7 @@ include 'Connection.php';
 
 $connection = new Connection();
 
+
 $sqlArrayCreateTable = array(
     "CREATE TABLE `Users` ( `id` INT NOT NULL AUTO_INCREMENT , 
         `username` VARCHAR(255) NOT NULL , 
@@ -19,18 +20,27 @@ $sqlArrayCreateTable = array(
         PRIMARY KEY (`id`), 
         FOREIGN KEY (`userId`)
         REFERENCES Users(`id`) ON DELETE CASCADE) ENGINE = InnoDB
-        ");
+        ",
+    "CREATE TABLE `Comment` ( `id` INT NOT NULL AUTO_INCREMENT , 
+        `userId` INT NOT NULL , 
+        `postId` INT NOT NULL , 
+        `creationDate` DATE NOT NULL , 
+        `text` VARCHAR(255),
+         PRIMARY KEY (`id`)) 
+        "
+);
 
 
 
 foreach ($sqlArrayCreateTable as $value) {
     $result = $connection->querySql($value);
-}
 
-if ($result) {
-    die("Tables created!<br/>");
-} else {
-    die("Tables already exists!<br/>");
+
+    if ($result) {
+        echo ("Tables created!<br/>");
+    } else {
+        echo ("Tables already exists!<br/>");
+    }
 }
 
 

@@ -72,7 +72,7 @@ class Tweet {
         $allTweets = array();
 
         $result = $connection->conn->query($sql);
-//        var_dump($result);
+
         if ($result == true && $result->num_rows != 0) {
 
             foreach ($result as $row) {

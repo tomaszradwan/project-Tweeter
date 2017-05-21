@@ -114,6 +114,7 @@ class User {
                 echo $connection->conn->error;
             }
         } else {
+            echo "Brak użytkownika o id $id";
             return false;
         }
     }
