@@ -18,16 +18,17 @@ $sqlArrayCreateTable = array(
         `text` VARCHAR(255) NOT NULL , 
         `creationDate` DATE NOT NULL , 
         PRIMARY KEY (`id`), 
-        FOREIGN KEY (`userId`)
-        REFERENCES Users(`id`) ON DELETE CASCADE) ENGINE = InnoDB
+        FOREIGN KEY (`userId`) REFERENCES Users(`id`) ON DELETE CASCADE) ENGINE = InnoDB
         ",
     "CREATE TABLE `Comment` ( `id` INT NOT NULL AUTO_INCREMENT , 
         `userId` INT NOT NULL , 
-        `postId` INT NOT NULL , 
+        `tweetId` INT NOT NULL , 
         `creationDate` DATE NOT NULL , 
         `text` VARCHAR(255),
-         PRIMARY KEY (`id`)) 
-        "
+         PRIMARY KEY (`id`),
+         FOREIGN KEY (`userId`) REFERENCES Users(`id`) ON DELETE CASCADE,
+         FOREIGN KEY (`tweetId`) REFERENCES Tweets(`id`) ON DELETE CASCADE) ENGINE = InnoDB 
+        ",
 );
 
 

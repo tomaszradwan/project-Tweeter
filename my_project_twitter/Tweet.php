@@ -9,6 +9,13 @@ class Tweet {
     private $text;
     private $creationDate;
 
+    public function __construct() {
+        $this->id = -1;
+        $this->userId = "";
+        $this->text = "";
+        $this->creationDate = "";
+    }
+
     public function setText($text) {
         $this->text = $text;
     }
@@ -31,13 +38,6 @@ class Tweet {
 
     public function getCreationDate() {
         return $this->creationDate;
-    }
-
-    public function __construct() {
-        $this->id = -1;
-        $this->userId = "";
-        $this->text = "";
-        $this->creationDate = "";
     }
 
     static public function loadTweetById($idTweet) {
@@ -67,7 +67,7 @@ class Tweet {
         $connection = new Connection();
         $id = $connection->conn->real_escape_string($idUser);
 
-        $sql = "SELECT * FROM `Tweets` WHERE userId=$id";
+        $sql = "SELECT * FROM Tweets WHERE userId=$id";
 
         $allTweets = array();
 
