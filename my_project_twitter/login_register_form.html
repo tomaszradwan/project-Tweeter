@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Twitter by Tomasz Radwan</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+
+    <body>
+        <div class="one" align="center">
+
+            <h3>Formularz logowania</h3>
+
+            <form method = "POST" action ="#">
+
+                <div>Podaj email:
+                    <input type="email" name="emaillogin" value ="" placeholder="email"/>
+                </div><br/>
+
+                <div>Podaj hasło:
+                    <input type = "password" name="passwordlogin" placeholder="password"/>
+                </div><br/>
+
+                <input type="submit" name ="send_login" value="zaloguj"/>
+            </form>
+        </div>
+
+
+        <div class ="two" align="center">
+
+            <h3 >Formularz rejestracji nowego użytkownika</h3>
+
+            <form method = "POST" action ="#">
+
+                <div>Podaj nazwę użytkownika:
+                    <input  type = "text" name="nameregister" value ="" placeholder="username"/>
+                </div><br/>
+
+                <div>Podaj email:
+                    <input  type = "email" name="emailregister" value ="" placeholder="email"/>
+                </div><br/>
+
+                <div>Podaj hasło:
+                    <input type = "password" name="passregister" placeholder="password"/>
+                </div><br/>
+
+                <input type="submit" name ="send_register" value="zarejestruj"/>
+            </form>
+        </div>
+
+    </body>
+
+</html>
