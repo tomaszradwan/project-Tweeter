@@ -43,7 +43,7 @@ class Comment {
     }
 
     public function getCreationDate() {
-        return $this->CreationDate;
+        return $this->creationDate;
     }
 
     public function getText() {

@@ -13,14 +13,14 @@
 
             <h3>Formularz logowania</h3>
 
-            <form method = "POST" action ="#">
+            <form method = "POST" action ="controller.php">
 
                 <div>Podaj email:
-                    <input type="email" name="emaillogin" value ="" placeholder="email"/>
+                    <input type="email" name="emaillogin" value ="" placeholder="email" required/>
                 </div><br/>
 
                 <div>Podaj hasło:
-                    <input type = "password" name="passwordlogin" placeholder="password"/>
+                    <input type = "password" name="passwordlogin" placeholder="password" required/>
                 </div><br/>
 
                 <input type="submit" name ="send_login" value="zaloguj"/>
@@ -35,15 +35,15 @@
             <form method = "POST" action ="#">
 
                 <div>Podaj nazwę użytkownika:
-                    <input  type = "text" name="nameregister" value ="" placeholder="username"/>
+                    <input  type = "text" name="nameregister" value ="" placeholder="username" required/>
                 </div><br/>
 
                 <div>Podaj email:
-                    <input  type = "email" name="emailregister" value ="" placeholder="email"/>
+                    <input  type = "email" name="emailregister" value ="" placeholder="email" required/>
                 </div><br/>
 
                 <div>Podaj hasło:
-                    <input type = "password" name="passregister" placeholder="password"/>
+                    <input type = "password" name="passregister" placeholder="password" required/>
                 </div><br/>
 
                 <input type="submit" name ="send_register" value="zarejestruj"/>

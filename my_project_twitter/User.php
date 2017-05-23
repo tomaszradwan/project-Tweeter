@@ -1,6 +1,6 @@
 <?php
 
-include_once 'Connection.php';
+require 'Connection.php';
 
 class User {
 
@@ -103,7 +103,7 @@ class User {
 
         $connection = new Connection();
 
-        if ($id > 0 && $this->pass_verify($id, $pass) == true) {
+        if ($id > 0 && $this->pass_verify_by_id($id, $pass) == true) {
 
             $sql = $connection->conn->prepare("DELETE FROM Users WHERE id= ?");
 
@@ -119,13 +119,37 @@ class User {
         }
     }
 
-    protected function pass_verify($id, $pass) {
+    protected function pass_verify_by_id($id, $pass) {
 
         $connection = new Connection();
 
         $id = $connection->conn->real_escape_string($id);
 
         $sql = "SELECT hashed_password FROM Users WHERE id=$id";
+        $result = $connection->querySql($sql);
+
+        $score = null;
+
+        while ($row = $result->fetch_row()) {
+            if ($score = $row[0]) {
+                $score = $row[0];
+            }
+        }
+
+        if ($score != null) {
+            return password_verify($pass, $score);
+        } else {
+            return false;
+        }
+    }
+
+    static public function pass_verify_by_email($email, $pass) {
+
+        $connection = new Connection();
+
+        $verifyEmail = filter_var($email, FILTER_VALIDATE_EMAIL);
+
+        $sql = "SELECT `hashed_password` FROM `Users` WHERE `email`='$verifyEmail'";
         $result = $connection->querySql($sql);
 
         $score = null;
