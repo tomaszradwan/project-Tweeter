@@ -33,7 +33,11 @@ class Tweet {
     }
 
     public function getUserId() {
-        return $this->userIdid;
+        return $this->userId;
+    }
+
+    public function getText() {
+        return $this->text;
     }
 
     public function getCreationDate() {

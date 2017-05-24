@@ -1,5 +1,7 @@
 <?php
 
+session_start();
+
 include "User.php";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -12,11 +14,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $passVerify = User::pass_verify_by_email($email, $pass);
 
         if ($passVerify) {
-            echo "Zalogowany!<br/>";
+            $userId = User::loadUserByEmail($email)->getId();
+            $_SESSION['userId'] = $userId;
+            header('Location: showUserAccount.php');
+
+            die("Zalogowany!<br/>");
         } else {
-            die("Błędne hasło!");
+            die("Błędne hasło!<br/>");
         }
     }
 } else {
-    die("Brak użytkownika");
+    die("Brak użytkownika w bazie<br/>");
 }

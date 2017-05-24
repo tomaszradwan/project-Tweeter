@@ -34,6 +34,10 @@ class User {
         return $this->id;
     }
 
+    public function getUserName() {
+        return $this->username;
+    }
+
     public function saveToDB() {
 
         $connection = new Connection();
@@ -165,6 +169,26 @@ class User {
         } else {
             return false;
         }
+    }
+
+    static public function loadUserByEmail($email) {
+
+        $connection = new Connection();
+
+
+        $sql = "SELECT * FROM `Users` WHERE `email`='$email'";
+
+        $result = $connection->conn->query($sql);
+
+        if ($result == true && $result->num_rows == 1) {
+            $row = $result->fetch_assoc();
+            $loadedUser = new User();
+            $loadedUser->id = $row['id'];
+            $loadedUser->username = $row['username'];
+            $loadedUser->email = $row['email'];
+            return $loadedUser;
+        }
+        return null;
     }
 
 }
