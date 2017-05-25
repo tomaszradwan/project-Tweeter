@@ -1,3 +1,6 @@
+<?php ?>
+
+
 
 
 <h1>WYLOGOWAŁEŚ SIĘ !</h1>

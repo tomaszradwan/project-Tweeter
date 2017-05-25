@@ -175,7 +175,6 @@ class User {
 
         $connection = new Connection();
 
-
         $sql = "SELECT * FROM `Users` WHERE `email`='$email'";
 
         $result = $connection->conn->query($sql);
@@ -189,6 +188,24 @@ class User {
             return $loadedUser;
         }
         return null;
+    }
+
+    static public function loadAllEmails($email) {
+
+        $connection = new Connection();
+
+        $sql = "SELECT `email` FROM `Users` WHERE `email` = '$email'";
+
+        $result = $connection->querySql($sql);
+
+        $table = array();
+
+        if ($result == true && $result->num_rows == 1) {
+            foreach ($result as $row) {
+                $table = $row['email'];
+            }
+        }
+        return $table;
     }
 
 }
