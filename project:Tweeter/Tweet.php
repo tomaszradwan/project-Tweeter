@@ -134,7 +134,7 @@ class Tweet {
         return false;
     }
 
-    public function deleteTweet($id) {
+    static public function deleteTweet($id) {
 
         $conection = new Connection();
 

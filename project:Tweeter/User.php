@@ -1,6 +1,6 @@
 <?php
 
-require 'Connection.php';
+include_once 'Connection.php';
 
 class User {
 
