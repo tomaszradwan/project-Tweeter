@@ -21,9 +21,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $newTweet = new Tweet();
 
     if (isset($_POST['logout'])) {
+
         $_POST = array();
+
         unset($_SESSION['userId']);
-        header('Location: logoutRegisterForm.php');
+
+        header('Location: logoutUser_ConfirmCreateUserForm.php');
+    } elseif (isset($_POST['editUser'])) {
+
+        header('Location: editUserForm.php?userId=' . $userId);
     } elseif (isset($_POST['textTweet']) && isset($_POST['tweetDate'])) {
 
         $text = $_POST['textTweet'];
@@ -76,6 +82,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="submit" name="logout" value="logout"/>
         </form>
 
+        <form action="#" method="POST" style="padding: 11px">
+            <input type="submit" name="editUser" value="edit User"/>
+        </form>
+
         <hr width="500px" align="left">
 
         <h1> Welcome, <?php echo $userName; ?> !</h1>
@@ -85,7 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         <h3>Your tweets with comments another user's:</h3>
-        <!--<table border="1">-->
+
         <table class="w3-table w3-striped w3-bordered">
             <tr>
                 <th>ID</th>
@@ -208,8 +218,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 </table>
-
-
-
 </body>
 </html>

@@ -38,6 +38,10 @@ class User {
         return $this->username;
     }
 
+    public function getUserEmail() {
+        return $this->email;
+    }
+
     public function saveToDB() {
 
         $connection = new Connection();
@@ -206,6 +210,21 @@ class User {
             }
         }
         return $table;
+    }
+
+    static public function updateUser($userId, $userName, $email) {
+
+        $connection = new Connection();
+
+        $sql = "UPDATE `Users` SET `username`= '$userName',`email`='$email' WHERE `id` = '$userId'";
+
+        $result = $connection->querySql($sql);
+
+        if ($result) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         try {
             if (!$email == $emailChecked) {
-                throw new Exception("Podany email nie znajduje się w bazie użytkowników!<br/>");
+                throw new Exception("Email not exist in database!<br/>");
             } else {
                 $email;
             }
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['userId'] = $userId;
             header('Location: showUserAccount.php');
         } else {
-            die("Błędne hasło!<br/>");
+            die("Wrong password!<br/>");
         }
     } elseif (isset($_POST['nameregister']) && isset($_POST['emailregister']) && isset($_POST['passregister'])) {
 
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         try {
             if ($email == $emailChecked) {
-                throw new Exception("Podany email znajduje się w bazie użytkowników!<br/>");
+                throw new Exception("Email already exist in database!<br/>");
             } else {
                 $email;
             }
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $userId = $newUser->getId();
 
             $_SESSION['userId'] = $userId;
-            header('Location: logoutRegisterForm.php');
+            header('Location: logoutUser_ConfirmCreateUserForm.php');
         } else {
             die('An error occurred while writing data to the database!<br/>');
         }
