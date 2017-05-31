@@ -1,22 +1,62 @@
 <?php
 
-include "../User.php";
-include "../Connection.php";
+include "User.php";
 
 class UserTest extends PHPUnit_Framework_TestCase {
 
-    private $conn;
+    public function testloadUserById() {
 
-    public function setUp() {
-        $this->conn = new Connection();
+        $id = 119;
+
+        $result = User::loadUserById($id);
+
+        $this->assertNotEmpty($result);
     }
 
-    public function testloadUserById('119') {
+    public function testloadAllUsers() {
 
+        $result = User::loadAllUsers();
 
-        // given
-        // when
-        // then
+        $this->assertNotEmpty($result);
+    }
+
+    public function testpass_verify_by_email() {
+
+        $email = 'tomek@tomek.pl';
+        $pass = "pass123";
+
+        $result = User::pass_verify_by_email($email, $pass);
+
+        $this->assertTrue($result);
+    }
+
+    public function testloadUserByEmail() {
+
+        $email = 'tomek@tomek.pl';
+
+        $result = User::loadUserByEmail($email);
+
+        $this->assertNotEmpty($result);
+    }
+
+    public function testloadAllEmails() {
+
+        $email = 'tomek@tomek.pl';
+
+        $result = User::loadAllEmails($email);
+
+        $this->assertSame($email, $result);
+    }
+
+    public function testupdateUser() {
+
+        $userId = 119;
+        $userName = "tomek radwan";
+        $email = "tomek@tomek.pl";
+
+        $result = User::updateUser($userId, $userName, $email);
+
+        $this->assertTrue($result);
     }
 
 }

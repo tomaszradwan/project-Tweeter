@@ -107,7 +107,7 @@ class User {
         return $ret;
     }
 
-    public function delete($id, $pass) {
+    static public function delete($id, $pass) {
 
         $connection = new Connection();
 
