@@ -21,7 +21,7 @@ if (array_key_exists(0, $matches)) {
             break;
 
         case "/indexx.html":
-            echo "<h1>YOU CREATED A USER PROFILE.</h1>
+            echo "<h1>YOU CREATED A USER.</h1>
 
         <form action =  'showUserAccount.php' method = 'POST'>
         <input type = 'submit' value = 'your profile'/>

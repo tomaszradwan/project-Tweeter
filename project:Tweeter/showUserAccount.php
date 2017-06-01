@@ -7,6 +7,8 @@ include 'User.php';
 include 'Tweet.php';
 include 'Comment.php';
 
+$currentDate = date("Y-m-d");
+
 
 if (isset($_SESSION['userId'])) {
 
@@ -25,10 +27,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_POST = array();
 
         unset($_SESSION['userId']);
-
         header('Location: logoutUser_ConfirmCreateUserForm.php');
     } elseif (isset($_POST['editUser'])) {
-
         header('Location: editUserForm.php?userId=' . $userId);
     } elseif (isset($_POST['textTweet']) && isset($_POST['tweetDate'])) {
 
@@ -147,7 +147,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <tr>
             <form action="#" method="POST">
                 <td><textarea name="textTweet" placeholder="wpisz wiadomość" rows="8" cols="20" maxlength="140" height="20" size="20" required></textarea></td>
-                <td><input name="tweetDate" type="date" required/></td>
+                <td><input name="tweetDate" type="text" value="<?php echo $currentDate ?>" readonly/></td>
+                <!--<td><input name="tweetDate" type="date"/></td>-->
                 <td><input type="submit" name="newtweet" value="create"/></td>
             </form>
         </tr>
@@ -209,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <td><input type="hidden" name="text" value="<?php echo $value->getText() ?>"><?php echo $value->getText() ?></td>
                 <td><input type="hidden" name="creationDate" value="<?php echo $value->getCreationDate() ?>"><?php echo $value->getCreationDate() ?></td>
                 <td><textarea name="commentTweet" placeholder="your message"></textarea></td>
-                <td><input name="commentDate" type="date" required/></td>
+                <td><input name="commentDate" type="text" value="<?php echo $currentDate ?>" readonly/></td>
                 <td><input type="submit" name="commentButton" value="comment"></td>
             </form>
         </tr>

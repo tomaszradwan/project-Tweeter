@@ -216,14 +216,28 @@ class User {
 
         $connection = new Connection();
 
-        $sql = "UPDATE `Users` SET `username`= '$userName',`email`='$email' WHERE `id` = '$userId'";
+        $sqlTableId = "SELECT `id` FROM `Users`";
+        $resultTableId = $connection->querySql($sqlTableId);
 
-        $result = $connection->querySql($sql);
+        $tableWithId = array();
 
-        if ($result) {
-            return true;
-        } else {
-            return false;
+        if ($resultTableId->num_rows > 0) {
+            foreach ($resultTableId as $key => $value) {
+                $tableWithId[] = $value['id'];
+            }
+
+            if (array_search($userId, $tableWithId)) {
+
+                $sql = "UPDATE `Users` SET `username`= '$userName',`email`='$email' WHERE `id` = '$userId'";
+
+                $result = $connection->querySql($sql);
+
+                if ($result) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
         }
     }
 

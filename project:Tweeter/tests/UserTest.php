@@ -60,3 +60,5 @@ class UserTest extends PHPUnit_Framework_TestCase {
     }
 
 }
+
+// ALL TESTS ARE GREEN
