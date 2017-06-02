@@ -58,7 +58,7 @@ class Comment {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string($idComment);
+        $id = $connection->conn->real_escape_string(trim($idComment));
 
         $sql = "SELECT * FROM Comment WHERE id=$id";
 
@@ -81,7 +81,7 @@ class Comment {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string($tweetId);
+        $id = $connection->conn->real_escape_string(trim($tweetId));
 
         $sql = "SELECT * FROM Comment WHERE tweetId=$id";
 
@@ -109,7 +109,9 @@ class Comment {
 
         $connection = new Connection();
 
-        $sql = "SELECT * FROM Comment WHERE userId=$idUser";
+        $id = $connection->conn->real_escape_string(trim($idUser));
+
+        $sql = "SELECT * FROM Comment WHERE userId=$id";
 
         $allComments = array();
 

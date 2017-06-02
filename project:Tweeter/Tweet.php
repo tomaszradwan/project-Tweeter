@@ -69,6 +69,7 @@ class Tweet {
     static public function loadAllTweetsByUserId($idUser) {
 
         $connection = new Connection();
+
         $id = $connection->conn->real_escape_string($idUser);
 
         $sql = "SELECT * FROM Tweets WHERE userId=$id";

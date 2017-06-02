@@ -4,7 +4,7 @@ include "User.php";
 
 class UserTest extends PHPUnit_Framework_TestCase {
 
-    public function testloadUserById() {
+    public function testLoadUserById() {
 
         $id = 119;
 
@@ -20,7 +20,7 @@ class UserTest extends PHPUnit_Framework_TestCase {
         $this->assertNotEmpty($result);
     }
 
-    public function testpass_verify_by_email() {
+    public function testPass_verify_by_email() {
 
         $email = 'tomek@tomek.pl';
         $pass = "pass123";
@@ -39,7 +39,7 @@ class UserTest extends PHPUnit_Framework_TestCase {
         $this->assertNotEmpty($result);
     }
 
-    public function testloadAllEmails() {
+    public function testLoadAllEmails() {
 
         $email = 'tomek@tomek.pl';
 
@@ -48,13 +48,26 @@ class UserTest extends PHPUnit_Framework_TestCase {
         $this->assertSame($email, $result);
     }
 
-    public function testupdateUser() {
+    public function testUpdateUser() {
 
         $userId = 119;
         $userName = "tomek radwan";
         $email = "tomek@tomek.pl";
 
         $result = User::updateUser($userId, $userName, $email);
+
+        $this->assertTrue($result);
+    }
+
+    public function testSaveToDB() {
+
+        $user = new User();
+
+        $user->setUserName("test");
+        $user->setPassword("test");
+        $user->setEmail("test@test.pl");
+
+        $result = $user->saveToDB();
 
         $this->assertTrue($result);
     }

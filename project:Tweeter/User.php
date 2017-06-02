@@ -60,11 +60,11 @@ class User {
         return false;
     }
 
-    static public function loadUserById($id) {
+    static public function loadUserById($idNum) {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string($id);
+        $id = $connection->conn->real_escape_string(trim($idNum));
 
         $sql = "SELECT * FROM Users WHERE id=$id";
 
@@ -107,9 +107,11 @@ class User {
         return $ret;
     }
 
-    static public function delete($id, $pass) {
+    static public function delete($idNum, $pass) {
 
         $connection = new Connection();
+
+        $id = $connection->conn->real_escape_string(trim($idNum));
 
         if ($id > 0 && $this->pass_verify_by_id($id, $pass) == true) {
 
@@ -127,13 +129,14 @@ class User {
         }
     }
 
-    protected function pass_verify_by_id($id, $pass) {
+    protected function pass_verify_by_id($idNum, $pass) {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string($id);
+        $id = $connection->conn->real_escape_string($idNum);
 
         $sql = "SELECT hashed_password FROM Users WHERE id=$id";
+
         $result = $connection->querySql($sql);
 
         $score = null;
@@ -158,6 +161,7 @@ class User {
         $verifyEmail = filter_var($email, FILTER_VALIDATE_EMAIL);
 
         $sql = "SELECT `hashed_password` FROM `Users` WHERE `email`='$verifyEmail'";
+
         $result = $connection->querySql($sql);
 
         $score = null;
@@ -179,7 +183,9 @@ class User {
 
         $connection = new Connection();
 
-        $sql = "SELECT * FROM `Users` WHERE `email`='$email'";
+        $verifyEmail = filter_var($email, FILTER_VALIDATE_EMAIL);
+
+        $sql = "SELECT * FROM `Users` WHERE `email`='$verifyEmail'";
 
         $result = $connection->conn->query($sql);
 
@@ -198,7 +204,9 @@ class User {
 
         $connection = new Connection();
 
-        $sql = "SELECT `email` FROM `Users` WHERE `email` = '$email'";
+        $verifyEmail = filter_var($email, FILTER_VALIDATE_EMAIL);
+
+        $sql = "SELECT `email` FROM `Users` WHERE `email` = '$verifyEmail'";
 
         $result = $connection->querySql($sql);
 
@@ -212,21 +220,27 @@ class User {
         return $table;
     }
 
-    static public function updateUser($userId, $userName, $email) {
+    static public function updateUser($user_Id, $user_Name, $email) {
 
         $connection = new Connection();
 
+        $verifyEmail = filter_var($email, FILTER_VALIDATE_EMAIL);
+        $userName = $connection->conn->real_escape_string(trim($user_Name));
+        $userId = $connection->conn->real_escape_string(trim($user_Id));
+
         $sqlTableId = "SELECT `id` FROM `Users`";
+
         $resultTableId = $connection->querySql($sqlTableId);
 
         $tableWithId = array();
 
         if ($resultTableId->num_rows > 0) {
+
             foreach ($resultTableId as $key => $value) {
                 $tableWithId[] = $value['id'];
             }
 
-            if (array_search($userId, $tableWithId) != false) {
+            if (in_array($userId, $tableWithId) != false) {
 
                 $sql = "UPDATE `Users` SET `username`= '$userName',`email`='$email' WHERE `id` = '$userId'";
 
@@ -239,6 +253,7 @@ class User {
                 }
             }
         }
+        return false;
     }
 
 }
