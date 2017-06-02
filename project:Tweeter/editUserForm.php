@@ -80,7 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="text" name="userName" value="<?php echo $userName ?>"><br/>
                 <label>User email:</label>
                 <input type="text" name="userEmail" value="<?php echo $userEmail ?>"><br/>
-                <input type="submit" name="updateUser">
+                <input type="submit" name="updateUser" value="Update">
             </form>
             <form action="#" method="POST"><input type="submit" name="userAccount" value="Back to User account"></form>
         </div>

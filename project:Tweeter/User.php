@@ -226,7 +226,7 @@ class User {
                 $tableWithId[] = $value['id'];
             }
 
-            if (array_search($userId, $tableWithId)) {
+            if (array_search($userId, $tableWithId) != false) {
 
                 $sql = "UPDATE `Users` SET `username`= '$userName',`email`='$email' WHERE `id` = '$userId'";
 
