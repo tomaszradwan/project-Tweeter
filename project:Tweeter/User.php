@@ -70,7 +70,6 @@ class User {
 
         $result = $connection->conn->query($sql);
 
-
         if ($result == true && $result->num_rows == 1) {
             $row = $result->fetch_assoc();
             $loadedUser = new User();
@@ -240,7 +239,7 @@ class User {
                 $tableWithId[] = $value['id'];
             }
 
-            if (in_array($userId, $tableWithId) != false) {
+            if (in_array($userId, $tableWithId)) {
 
                 $sql = "UPDATE `Users` SET `username`= '$userName',`email`='$email' WHERE `id` = '$userId'";
 
