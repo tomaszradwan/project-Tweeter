@@ -4,18 +4,14 @@ include_once 'Connection.php';
 
 class Comment {
 
-    private $id;
-    private $userId;
-    private $tweetId;
-    private $creationDate;
-    private $text;
+    private $id = -1;
+    private $userId = "";
+    private $tweetId = "";
+    private $creationDate = "";
+    private $text = "";
 
-    public function __construct() {
-        $this->id = -1;
-        $this->tweetId = "";
-        $this->userId = "";
-        $this->creationDate = "";
-        $this->text = "";
+    public function setId($id) {
+        $this->id = $id;
     }
 
     public function setUserId($id) {
@@ -54,30 +50,32 @@ class Comment {
         return $this->text;
     }
 
-    static public function loadCommentById($idComment) {
+    static public function getById($commentId) {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string(trim($idComment));
+        $id = $connection->conn->real_escape_string(trim($commentId));
 
         $sql = "SELECT * FROM Comment WHERE id=$id";
 
         $result = $connection->conn->query($sql);
 
         if ($result == true && $result->num_rows == 1) {
+
             $row = $result->fetch_assoc();
-            $loadedComment = new Comment();
-            $loadedComment->id = $row['id'];
-            $loadedComment->userId = $row['userId'];
-            $loadedComment->tweetId = $row['tweetId'];
-            $loadedComment->creationDate = $row['creationDate'];
-            $loadedComment->text = $row['text'];
-            return $loadedComment;
+
+            $comment = new Comment();
+            $comment->setId($row['id']);
+            $comment->setUserId($row['userId']);
+            $comment->setTweetId($row['tweetId']);
+            $comment->setCreationDate($row['creationDate']);
+            $comment->setText($row['text']);
+            return $comment;
         }
-        return null;
+        return;
     }
 
-    static public function loadCommentByTweetId($tweetId) {
+    static public function getTweetById($tweetId) {
 
         $connection = new Connection();
 
@@ -92,24 +90,24 @@ class Comment {
         if ($result == true && $result->num_rows != 0) {
 
             foreach ($result as $row) {
-                $loadedTweetIdComment = new Comment();
-                $loadedTweetIdComment->id = $row['id'];
-                $loadedTweetIdComment->userId = $row['userId'];
-                $loadedTweetIdComment->tweetId = $row['tweetId'];
-                $loadedTweetIdComment->text = $row['text'];
-                $loadedTweetIdComment->creationDate = $row['creationDate'];
+                $comment = new Comment();
+                $comment->setId($row['id']);
+                $comment->setUserId($row['userId']);
+                $comment->setTweetId($row['tweetId']);
+                $comment->setText($row['text']);
+                $comment->setCreationDate($row['creationDate']);
 
-                $allComments[] = $loadedTweetIdComment;
+                $allComments[] = $comment;
             }
         }
         return $allComments;
     }
 
-    static public function loadAllCommentByUserId($idUser) {
+    static public function getByUserId($userId) {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string(trim($idUser));
+        $id = $connection->conn->real_escape_string(trim($userId));
 
         $sql = "SELECT * FROM Comment WHERE userId=$id";
 
@@ -120,12 +118,13 @@ class Comment {
         if ($result == true && $result->num_rows != 0) {
 
             foreach ($result as $row) {
+
                 $loadedUserComment = new Comment();
-                $loadedUserComment->id = $row['id'];
-                $loadedUserComment->userId = $row['userId'];
-                $loadedUserComment->tweetId = $row['tweetId'];
-                $loadedUserComment->text = $row['text'];
-                $loadedUserComment->creationDate = $row['creationDate'];
+                $loadedUserComment->setId($row['id']);
+                $loadedUserComment->setUserId($row['userId']);
+                $loadedUserComment->setTweetId($row['tweetId']);
+                $loadedUserComment->setText($row['text']);
+                $loadedUserComment->setCreationDate($row['creationDate']);
 
                 $allComments[] = $loadedUserComment;
             }
@@ -133,12 +132,12 @@ class Comment {
         return $allComments;
     }
 
-    static public function deleteComment($idComment) {
+    static public function delete($commentId) {
 
         $conection = new Connection();
 
         $stmt = $conection->conn->prepare("DELETE FROM Comment WHERE id = ?");
-        $stmt->bind_param("i", $idComment);
+        $stmt->bind_param("i", $commentId);
         $stmt->execute();
     }
 
@@ -151,7 +150,7 @@ class Comment {
             $sql = "INSERT INTO `Comment`(`userId`, `tweetId`,`creationDate`, `text`) VALUES ($this->userId, '$this->tweetId', '$this->creationDate', '$this->text')";
             $result = $connection->querySql($sql);
 
-            if ($result == true) {
+            if ($result) {
 
                 $this->id = $connection->conn->insert_id;
                 return true;

@@ -16,8 +16,7 @@ class Connection {
      * @return type result of query
      */
     public function querySql($sql) {
-        $result = $this->conn->query($sql);
-        return $result;
+        return $this->conn->query($sql);
     }
 
     public function __destruct() {

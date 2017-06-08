@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = $_POST['emaillogin'];
         $pass = $_POST['passwordlogin'];
 
-        $emailChecked = User::loadAllEmails($email);
+        $emailChecked = User::verifyEmailInDB($email);
 
         try {
             if (!$email == $emailChecked) {
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             die($exc->getMessage());
         }
 
-        $passVerify = User::pass_verify_by_email($email, $pass);
+        $passVerify = User::passVerifyByEmail($email, $pass);
 
         if ($passVerify) {
             $userId = User::loadUserByEmail($email)->getId();
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $newUser = new User();
 
-        $emailChecked = User::loadAllEmails($email);
+        $emailChecked = User::verifyEmailInDB($email);
 
         try {
             if ($email == $emailChecked) {

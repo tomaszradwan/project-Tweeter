@@ -18,8 +18,7 @@ class User {
     }
 
     public function setPassword($newPassword) {
-        $newHashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
-        $this->hashedPassword = $newHashedPassword;
+        $this->hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
     }
 
     public function setUserName($username) {
@@ -28,6 +27,10 @@ class User {
 
     public function setEmail($email) {
         $this->email = $email;
+    }
+
+    public function setId($id) {
+        $this->id = $id;
     }
 
     public function getId() {
@@ -60,11 +63,11 @@ class User {
         return false;
     }
 
-    static public function loadUserById($idNum) {
+    static public function loadUserById($idNumber) {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string(trim($idNum));
+        $id = $connection->conn->real_escape_string(trim($idNumber));
 
         $sql = "SELECT * FROM Users WHERE id=$id";
 
@@ -72,12 +75,12 @@ class User {
 
         if ($result == true && $result->num_rows == 1) {
             $row = $result->fetch_assoc();
-            $loadedUser = new User();
-            $loadedUser->id = $row['id'];
-            $loadedUser->username = $row['username'];
-            $loadedUser->hashedPassword = $row['hashed_password'];
-            $loadedUser->email = $row['email'];
-            return $loadedUser;
+            $user = new User();
+            $user->setId($row['id']);
+            $user->setUserName($row['username']);
+            $user->setPassword($row['hashed_password']);
+            $user->setEmail($row['email']);
+            return $user;
         }
         return null;
     }
@@ -88,31 +91,31 @@ class User {
 
         $sql = "SELECT * FROM Users";
 
-        $ret = [];
+        $allUsers = array();
 
         $result = $connection->conn->query($sql);
 
         if ($result == true && $result->num_rows != 0) {
             foreach ($result as $row) {
-                $loadedUser = new User();
-                $loadedUser->id = $row['id'];
-                $loadedUser->username = $row['username'];
-                $loadedUser->hashedPassword = $row['hashed_password'];
-                $loadedUser->email = $row['email'];
+                $user = new User();
+                $user->setId($row['id']);
+                $user->setUserName($row['username']);
+                $user->setPassword($row['hashed_password']);
+                $user->setEmail($row['email']);
 
-                $ret[] = $loadedUser;
+                $allUsers[] = $loadedUser;
             }
         }
-        return $ret;
+        return $allUsers;
     }
 
-    static public function delete($idNum, $pass) {
+    static public function delete($idNumber, $pass) {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string(trim($idNum));
+        $id = $connection->conn->real_escape_string(trim($idNumber));
 
-        if ($id > 0 && $this->pass_verify_by_id($id, $pass) == true) {
+        if ($id > 0 && passVerifyById($id, $pass) == true) {
 
             $sql = $connection->conn->prepare("DELETE FROM Users WHERE id= ?");
 
@@ -128,11 +131,11 @@ class User {
         }
     }
 
-    protected function pass_verify_by_id($idNum, $pass) {
+    public function passVerifyById($idNumber, $pass) {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string($idNum);
+        $id = $connection->conn->real_escape_string($idNumber);
 
         $sql = "SELECT hashed_password FROM Users WHERE id=$id";
 
@@ -153,7 +156,7 @@ class User {
         }
     }
 
-    static public function pass_verify_by_email($email, $pass) {
+    static public function passVerifyByEmail($email, $pass) {
 
         $connection = new Connection();
 
@@ -199,7 +202,7 @@ class User {
         return null;
     }
 
-    static public function loadAllEmails($email) {
+    static public function verifyEmailInDB($email) {
 
         $connection = new Connection();
 
@@ -209,14 +212,12 @@ class User {
 
         $result = $connection->querySql($sql);
 
-        $table = array();
-
-        if ($result == true && $result->num_rows == 1) {
+        if ($result) {
             foreach ($result as $row) {
-                $table = $row['email'];
+                $emailChecked = $row['email'];
             }
         }
-        return $table;
+        return $emailChecked;
     }
 
     static public function updateUser($user_Id, $user_Name, $email) {
@@ -224,6 +225,7 @@ class User {
         $connection = new Connection();
 
         $verifyEmail = filter_var($email, FILTER_VALIDATE_EMAIL);
+
         $userName = $connection->conn->real_escape_string(trim($user_Name));
         $userId = $connection->conn->real_escape_string(trim($user_Id));
 

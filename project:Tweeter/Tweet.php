@@ -4,16 +4,13 @@ include_once 'Connection.php';
 
 class Tweet {
 
-    private $id;
-    private $userId;
-    private $text;
-    private $creationDate;
+    private $id = -1;
+    private $userId = "";
+    private $text = "";
+    private $creationDate = "";
 
-    public function __construct() {
-        $this->id = -1;
-        $this->userId = "";
-        $this->text = "";
-        $this->creationDate = "";
+    public function setId($id) {
+        $this->id = $id;
     }
 
     public function setText($text) {
@@ -44,11 +41,11 @@ class Tweet {
         return $this->creationDate;
     }
 
-    static public function loadTweetById($idTweet) {
+    static public function getById($tweetId) {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string($idTweet);
+        $id = $connection->conn->real_escape_string($tweetId);
 
         $sql = "SELECT * FROM Tweets WHERE id=$id";
 
@@ -56,21 +53,21 @@ class Tweet {
 
         if ($result == true && $result->num_rows == 1) {
             $row = $result->fetch_assoc();
-            $loadedTweet = new Tweet();
-            $loadedTweet->id = $row['id'];
-            $loadedTweet->userId = $row['userId'];
-            $loadedTweet->text = $row['text'];
-            $loadedTweet->creationDate = $row['creationDate'];
-            return $loadedTweet;
+            $tweet = new Tweet();
+            $tweet->setId($row['id']);
+            $tweet->setUserId($row['userId']);
+            $tweet->setText($row['text']);
+            $tweet->setCreationDate($row['creationDate']);
+            return $tweet;
         }
         return null;
     }
 
-    static public function loadAllTweetsByUserId($idUser) {
+    static public function getByUserId($userId) {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string($idUser);
+        $id = $connection->conn->real_escape_string($userId);
 
         $sql = "SELECT * FROM Tweets WHERE userId=$id";
 
@@ -81,13 +78,13 @@ class Tweet {
         if ($result == true && $result->num_rows != 0) {
 
             foreach ($result as $row) {
-                $loadedUserTweet = new Tweet();
-                $loadedUserTweet->id = $row['id'];
-                $loadedUserTweet->userId = $row['userId'];
-                $loadedUserTweet->text = $row['text'];
-                $loadedUserTweet->creationDate = $row['creationDate'];
+                $userTweet = new Tweet();
+                $userTweet->id = $row['id'];
+                $userTweet->userId = $row['userId'];
+                $userTweet->text = $row['text'];
+                $userTweet->creationDate = $row['creationDate'];
 
-                $allTweets[] = $loadedUserTweet;
+                $allTweets[] = $userTweet;
             }
         }
         return $allTweets;
@@ -99,22 +96,22 @@ class Tweet {
 
         $sql = "SELECT * FROM Tweets";
 
-        $ret = [];
+        $allTweets = array();
 
         $result = $connection->conn->query($sql);
 
         if ($result == true && $result->num_rows != 0) {
             foreach ($result as $row) {
-                $loadedTweet = new Tweet();
-                $loadedTweet->id = $row['id'];
-                $loadedTweet->userId = $row['userId'];
-                $loadedTweet->text = $row['text'];
-                $loadedTweet->creationDate = $row['creationDate'];
+                $tweets = new Tweet();
+                $tweets->id = $row['id'];
+                $tweets->userId = $row['userId'];
+                $tweets->text = $row['text'];
+                $tweets->creationDate = $row['creationDate'];
 
-                $ret[] = $loadedTweet;
+                $allTweets[] = $tweets;
             }
         }
-        return $ret;
+        return $allTweets;
     }
 
     public function saveToDB() {
@@ -126,7 +123,7 @@ class Tweet {
             $sql = "INSERT INTO `Tweets`(`userId`, `text`, `creationDate`) VALUES ('$this->userId', '$this->text', '$this->creationDate')";
             $result = $connection->querySql($sql);
 
-            if ($result == true) {
+            if ($result) {
 
                 $this->id = $connection->conn->insert_id;
                 return true;
@@ -135,7 +132,7 @@ class Tweet {
         return false;
     }
 
-    static public function deleteTweet($id) {
+    static public function delete($id) {
 
         $conection = new Connection();
 

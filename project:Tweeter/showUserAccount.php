@@ -7,6 +7,8 @@ include 'User.php';
 include 'Tweet.php';
 include 'Comment.php';
 
+var_dump(User::verifyEmailInDB('tomek@tomek.pl'));
+
 $currentDate = date("Y-m-d");
 
 
@@ -45,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } elseif (isset($_POST['deleteTweet'])) {
 
         $tweetId = $_POST['deleteTweet'];
-        Tweet::deleteTweet($tweetId);
+        Tweet::delete($tweetId);
     } elseif (isset($_POST['tweetIdComment']) && isset($_POST['commentTweet']) && isset($_POST['commentDate'])) {
 
         $tweet_Id = $_POST['tweetIdComment'];
@@ -64,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     } elseif (isset($_POST['commentDelete'])) {
         $idComment = $_POST['commentDelete'];
-        Comment::deleteComment($idComment);
+        Comment::delete($idComment);
     }
 }
 ?>
@@ -106,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </tr>
 
             <?php
-            $userTweets = Tweet::loadAllTweetsByUserId($userId);
+            $userTweets = Tweet::getByUserId($userId);
 
             if ($userTweets != null) {
                 foreach ($userTweets as $key => $value):
@@ -118,7 +120,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <td><?php echo $value->getCreationDate() ?></td>
                         <td><form action="#" method="POST"><button type="submit" name="deleteTweet" value="<?php echo $value->getId() ?>">delete tweet</button></form></td>
                         <?php
-                        $commentByTweetId = Comment::loadCommentByTweetId($value->getId());
+                        $commentByTweetId = Comment::getTweetById($value->getId());
 
                         if (count($commentByTweetId) > 0) {
                             foreach ($commentByTweetId as $key => $value):
@@ -165,7 +167,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <th>Delete Comment</th>
         </tr>
         <?php
-        $allCommentsByUser = Comment::loadAllCommentByUserId($userId);
+        $allCommentsByUser = Comment::getByUserId($userId);
 
         if ($allCommentsByUser != null) {
             foreach ($allCommentsByUser as $key => $value):
