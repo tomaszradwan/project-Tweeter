@@ -4,43 +4,99 @@ include_once 'Connection.php';
 
 class Tweet {
 
+    /**
+     *
+     * @var type 
+     */
     private $id = -1;
+
+    /**
+     *
+     * @var type 
+     */
     private $userId = "";
+
+    /**
+     *
+     * @var type 
+     */
     private $text = "";
+
+    /**
+     *
+     * @var type 
+     */
     private $creationDate = "";
 
+    /**
+     * 
+     * @param type $id
+     */
     public function setId($id) {
         $this->id = $id;
     }
 
+    /**
+     * 
+     * @param type $text
+     */
     public function setText($text) {
         $this->text = $text;
     }
 
+    /**
+     * 
+     * @param type $userId
+     */
     public function setUserId($userId) {
         $this->userId = $userId;
     }
 
+    /**
+     * 
+     * @param type $creationDate
+     */
     public function setCreationDate($creationDate) {
         $this->creationDate = $creationDate;
     }
 
+    /**
+     * 
+     * @return type
+     */
     public function getId() {
         return $this->id;
     }
 
+    /**
+     * 
+     * @return type
+     */
     public function getUserId() {
         return $this->userId;
     }
 
+    /**
+     * 
+     * @return type
+     */
     public function getText() {
         return $this->text;
     }
 
+    /**
+     * 
+     * @return type
+     */
     public function getCreationDate() {
         return $this->creationDate;
     }
 
+    /**
+     * 
+     * @param type $tweetId
+     * @return \Tweet
+     */
     static public function getById($tweetId) {
 
         $connection = new Connection();
@@ -63,6 +119,11 @@ class Tweet {
         return null;
     }
 
+    /**
+     * 
+     * @param type $userId
+     * @return \Tweet
+     */
     static public function getByUserId($userId) {
 
         $connection = new Connection();
@@ -90,6 +151,10 @@ class Tweet {
         return $allTweets;
     }
 
+    /**
+     * 
+     * @return \Tweet
+     */
     static public function loadAllTweets() {
 
         $connection = new Connection();
@@ -114,6 +179,10 @@ class Tweet {
         return $allTweets;
     }
 
+    /**
+     * 
+     * @return boolean
+     */
     public function saveToDB() {
 
         $connection = new Connection();
@@ -126,12 +195,17 @@ class Tweet {
             if ($result) {
 
                 $this->id = $connection->conn->insert_id;
+
                 return true;
             }
         }
         return false;
     }
 
+    /**
+     * 
+     * @param type $id
+     */
     static public function delete($id) {
 
         $conection = new Connection();

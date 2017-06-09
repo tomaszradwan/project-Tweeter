@@ -4,47 +4,90 @@ include_once 'Connection.php';
 
 class User {
 
-    private $id;
-    private $username;
-    private $hashedPassword;
-    private $email;
+    /**
+     *
+     * @var type 
+     */
+    private $id = -1;
 
-    public function __construct() {
+    /**
+     *
+     * @var type 
+     */
+    private $username = "";
 
-        $this->id = -1;
-        $this->username = "";
-        $this->email = "";
-        $this->hashedPassword = "";
-    }
+    /**
+     *
+     * @var type 
+     */
+    private $hashedPassword = "";
 
+    /**
+     *
+     * @var type 
+     */
+    private $email = "";
+
+    /**
+     * 
+     * @param type $newPassword
+     */
     public function setPassword($newPassword) {
         $this->hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
     }
 
+    /**
+     * 
+     * @param type $username
+     */
     public function setUserName($username) {
         $this->username = $username;
     }
 
+    /**
+     * 
+     * @param type $email
+     */
     public function setEmail($email) {
         $this->email = $email;
     }
 
+    /**
+     * 
+     * @param type $id
+     */
     public function setId($id) {
         $this->id = $id;
     }
 
+    /**
+     * 
+     * @return type
+     */
     public function getId() {
         return $this->id;
     }
 
+    /**
+     * 
+     * @return type
+     */
     public function getUserName() {
         return $this->username;
     }
 
+    /**
+     * 
+     * @return type
+     */
     public function getUserEmail() {
         return $this->email;
     }
 
+    /**
+     * 
+     * @return boolean
+     */
     public function saveToDB() {
 
         $connection = new Connection();
@@ -63,6 +106,11 @@ class User {
         return false;
     }
 
+    /**
+     * 
+     * @param type $idNumber
+     * @return \User
+     */
     static public function loadUserById($idNumber) {
 
         $connection = new Connection();
@@ -85,6 +133,10 @@ class User {
         return null;
     }
 
+    /**
+     * 
+     * @return type
+     */
     static public function loadAllUsers() {
 
         $connection = new Connection();
@@ -103,19 +155,25 @@ class User {
                 $user->setPassword($row['hashed_password']);
                 $user->setEmail($row['email']);
 
-                $allUsers[] = $loadedUser;
+                $allUsers[] = $user;
             }
         }
         return $allUsers;
     }
 
+    /**
+     * 
+     * @param type $idNumber
+     * @param type $pass
+     * @return boolean
+     */
     static public function delete($idNumber, $pass) {
 
         $connection = new Connection();
 
         $id = $connection->conn->real_escape_string(trim($idNumber));
 
-        if ($id > 0 && passVerifyById($id, $pass) == true) {
+        if ($id > 0 && User::passVerifyById($id, $pass) == true) {
 
             $sql = $connection->conn->prepare("DELETE FROM Users WHERE id= ?");
 
@@ -123,7 +181,7 @@ class User {
                 $sql->bind_param('i', $id);
                 $sql->execute();
             } else {
-                echo $connection->conn->error;
+                die($connection->conn->error);
             }
         } else {
             echo "Brak użytkownika o id $id";
@@ -131,7 +189,13 @@ class User {
         }
     }
 
-    public function passVerifyById($idNumber, $pass) {
+    /**
+     * 
+     * @param type $idNumber
+     * @param type $pass
+     * @return boolean
+     */
+    static public function passVerifyById($idNumber, $pass) {
 
         $connection = new Connection();
 
@@ -141,21 +205,21 @@ class User {
 
         $result = $connection->querySql($sql);
 
-        $score = null;
+        $passFromDB = $result->fetch_assoc()['hashed_password'];
 
-        while ($row = $result->fetch_row()) {
-            if ($score = $row[0]) {
-                $score = $row[0];
-            }
-        }
-
-        if ($score != null) {
-            return password_verify($pass, $score);
+        if ($passFromDB != null) {
+            return password_verify($pass, $passFromDB);
         } else {
             return false;
         }
     }
 
+    /**
+     * 
+     * @param type $email
+     * @param type $pass
+     * @return boolean
+     */
     static public function passVerifyByEmail($email, $pass) {
 
         $connection = new Connection();
@@ -166,21 +230,20 @@ class User {
 
         $result = $connection->querySql($sql);
 
-        $score = null;
+        $passFromDB = $result->fetch_assoc()['hashed_password'];
 
-        while ($row = $result->fetch_row()) {
-            if ($score = $row[0]) {
-                $score = $row[0];
-            }
-        }
-
-        if ($score != null) {
-            return password_verify($pass, $score);
+        if ($passFromDB != null) {
+            return password_verify($pass, $passFromDB);
         } else {
             return false;
         }
     }
 
+    /**
+     * 
+     * @param type $email
+     * @return \User
+     */
     static public function loadUserByEmail($email) {
 
         $connection = new Connection();
@@ -193,15 +256,21 @@ class User {
 
         if ($result == true && $result->num_rows == 1) {
             $row = $result->fetch_assoc();
-            $loadedUser = new User();
-            $loadedUser->id = $row['id'];
-            $loadedUser->username = $row['username'];
-            $loadedUser->email = $row['email'];
-            return $loadedUser;
+            $user = new User();
+            $user->setId($row['id']);
+            $user->setUserName($row['username']);
+            $user->setPassword($row['hashed_password']);
+            $user->setEmail($row['email']);
+            return $user;
         }
         return null;
     }
 
+    /**
+     * 
+     * @param type $email
+     * @return boolean
+     */
     static public function verifyEmailInDB($email) {
 
         $connection = new Connection();
@@ -212,49 +281,39 @@ class User {
 
         $result = $connection->querySql($sql);
 
-        if ($result) {
-            foreach ($result as $row) {
-                $emailChecked = $row['email'];
-            }
+        if ($result && $result->num_rows == 1) {
+
+            $emailChecked = $result->fetch_assoc()['email'];
+
+            return $emailChecked;
         }
-        return $emailChecked;
+        return false;
     }
 
-    static public function updateUser($user_Id, $user_Name, $email) {
+    /**
+     * 
+     * @param type $userId
+     * @param type $userName
+     * @param type $userEmail
+     * @return boolean
+     */
+    static public function updateUser($userId, $userName, $userEmail) {
 
         $connection = new Connection();
 
-        $verifyEmail = filter_var($email, FILTER_VALIDATE_EMAIL);
+        $id = $connection->conn->real_escape_string(trim($userId));
+        $user = $connection->conn->real_escape_string(trim($userName));
+        $email = filter_var($userEmail, FILTER_VALIDATE_EMAIL);
 
-        $userName = $connection->conn->real_escape_string(trim($user_Name));
-        $userId = $connection->conn->real_escape_string(trim($user_Id));
+        $sql = "UPDATE `Users` SET `username`= '$user',`email`='$email' WHERE `id` = '$id'";
 
-        $sqlTableId = "SELECT `id` FROM `Users`";
+        $result = $connection->querySql($sql);
 
-        $resultTableId = $connection->querySql($sqlTableId);
-
-        $tableWithId = array();
-
-        if ($resultTableId->num_rows > 0) {
-
-            foreach ($resultTableId as $key => $value) {
-                $tableWithId[] = $value['id'];
-            }
-
-            if (in_array($userId, $tableWithId)) {
-
-                $sql = "UPDATE `Users` SET `username`= '$userName',`email`='$email' WHERE `id` = '$userId'";
-
-                $result = $connection->querySql($sql);
-
-                if ($result) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
+        if ($result) {
+            return true;
+        } else {
+            return false;
         }
-        return false;
     }
 
 }

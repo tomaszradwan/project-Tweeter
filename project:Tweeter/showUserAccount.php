@@ -7,10 +7,7 @@ include 'User.php';
 include 'Tweet.php';
 include 'Comment.php';
 
-var_dump(User::verifyEmailInDB('tomek@tomek.pl'));
-
 $currentDate = date("Y-m-d");
-
 
 if (isset($_SESSION['userId'])) {
 
@@ -31,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         unset($_SESSION['userId']);
         header('Location: logoutUser_ConfirmCreateUserForm.php');
     } elseif (isset($_POST['editUser'])) {
-        header('Location: editUserForm.php?userId=' . $userId);
+        header('Location: editUser.php?userId=' . $userId);
     } elseif (isset($_POST['textTweet']) && isset($_POST['tweetDate'])) {
 
         $text = $_POST['textTweet'];

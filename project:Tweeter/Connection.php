@@ -2,6 +2,10 @@
 
 class Connection {
 
+    /**
+     *
+     * @var type 
+     */
     public $conn;
 
     public function __construct() {

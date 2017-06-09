@@ -4,44 +4,104 @@ include_once 'Connection.php';
 
 class Comment {
 
+    /**
+     *
+     * @var type 
+     */
     private $id = -1;
+
+    /**
+     *
+     * @var type 
+     */
     private $userId = "";
+
+    /**
+     *
+     * @var type 
+     */
     private $tweetId = "";
+
+    /**
+     *
+     * @var type 
+     */
     private $creationDate = "";
+
+    /**
+     *
+     * @var type 
+     */
     private $text = "";
 
+    /**
+     * 
+     * @param type $id
+     */
     public function setId($id) {
         $this->id = $id;
     }
 
+    /**
+     * 
+     * @param type $id
+     */
     public function setUserId($id) {
         $this->userId = $id;
     }
 
+    /**
+     * 
+     * @param type $tweetId
+     */
     public function setTweetId($tweetId) {
         $this->tweetId = $tweetId;
     }
 
+    /**
+     * 
+     * @param type $date
+     */
     public function setCreationDate($date) {
         $this->creationDate = $date;
     }
 
+    /**
+     * 
+     * @param type $text
+     */
     public function setText($text) {
         $this->text = $text;
     }
 
+    /**
+     * 
+     * @return type
+     */
     public function getId() {
         return $this->id;
     }
 
+    /**
+     * 
+     * @return type
+     */
     public function getUserId() {
         return $this->userId;
     }
 
+    /**
+     * 
+     * @return type
+     */
     public function getTweetId() {
         return $this->tweetId;
     }
 
+    /**
+     * 
+     * @return type
+     */
     public function getCreationDate() {
         return $this->creationDate;
     }
@@ -50,6 +110,11 @@ class Comment {
         return $this->text;
     }
 
+    /**
+     * 
+     * @param type $commentId
+     * @return \Comment
+     */
     static public function getById($commentId) {
 
         $connection = new Connection();
@@ -75,6 +140,11 @@ class Comment {
         return;
     }
 
+    /**
+     * 
+     * @param type $tweetId
+     * @return \Comment
+     */
     static public function getTweetById($tweetId) {
 
         $connection = new Connection();
@@ -103,6 +173,11 @@ class Comment {
         return $allComments;
     }
 
+    /**
+     * 
+     * @param type $userId
+     * @return \Comment
+     */
     static public function getByUserId($userId) {
 
         $connection = new Connection();
@@ -132,6 +207,10 @@ class Comment {
         return $allComments;
     }
 
+    /**
+     * 
+     * @param type $commentId
+     */
     static public function delete($commentId) {
 
         $conection = new Connection();
@@ -141,6 +220,10 @@ class Comment {
         $stmt->execute();
     }
 
+    /**
+     * 
+     * @return boolean
+     */
     public function saveToDB() {
 
         $connection = new Connection();
