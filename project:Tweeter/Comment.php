@@ -194,14 +194,14 @@ class Comment {
 
             foreach ($result as $row) {
 
-                $loadedUserComment = new Comment();
-                $loadedUserComment->setId($row['id']);
-                $loadedUserComment->setUserId($row['userId']);
-                $loadedUserComment->setTweetId($row['tweetId']);
-                $loadedUserComment->setText($row['text']);
-                $loadedUserComment->setCreationDate($row['creationDate']);
+                $userComments = new Comment();
+                $userComments->setId($row['id']);
+                $userComments->setUserId($row['userId']);
+                $userComments->setTweetId($row['tweetId']);
+                $userComments->setText($row['text']);
+                $userComments->setCreationDate($row['creationDate']);
 
-                $allComments[] = $loadedUserComment;
+                $allComments[] = $userComments;
             }
         }
         return $allComments;

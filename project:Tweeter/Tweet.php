@@ -140,10 +140,10 @@ class Tweet {
 
             foreach ($result as $row) {
                 $userTweet = new Tweet();
-                $userTweet->id = $row['id'];
-                $userTweet->userId = $row['userId'];
-                $userTweet->text = $row['text'];
-                $userTweet->creationDate = $row['creationDate'];
+                $userTweet->setId($row['id']);
+                $userTweet->setUserId($row['userId']);
+                $userTweet->setText($row['text']);
+                $userTweet->setCreationDate($row['creationDate']);
 
                 $allTweets[] = $userTweet;
             }
@@ -168,10 +168,10 @@ class Tweet {
         if ($result == true && $result->num_rows != 0) {
             foreach ($result as $row) {
                 $tweets = new Tweet();
-                $tweets->id = $row['id'];
-                $tweets->userId = $row['userId'];
-                $tweets->text = $row['text'];
-                $tweets->creationDate = $row['creationDate'];
+                $tweets->setId($row['id']);
+                $tweets->setUserId($row['userId']);
+                $tweets->setText($row['text']);
+                $tweets->setCreationDate($row['creationDate']);
 
                 $allTweets[] = $tweets;
             }
