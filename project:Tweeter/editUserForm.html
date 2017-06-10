@@ -42,7 +42,9 @@
 
     <body>
         <div>
-            <h4>%text%</h4>
+            <h4>%textConfirmChanges%</h4>
+            <h4>%textWrongPassword%</h4>
+
             <h2>Edit User data :</h2>
             <form action="#" method="POST">
                 <label>User name:</label>
@@ -52,6 +54,12 @@
                 <input type="submit" name="updateUser" value="Update">
             </form>
             <form action="#" method="POST"><input type="submit" name="userAccount" value="Back to User account"></form>
+
+            <form action="#" method="POST">
+                <label>User password</label>
+                <input type="password" name="userPassword" required><br/>
+                <input type="submit" name="deleteUser" value="!!! DELETE USER !!!">
+            </form>
         </div>
     </body>
 </html>

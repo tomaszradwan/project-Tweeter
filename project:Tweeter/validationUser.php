@@ -11,16 +11,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $email = $_POST['emaillogin'];
         $pass = $_POST['passwordlogin'];
 
-        $emailChecked = User::verifyEmailInDB($email);
+        $emailVerify = User::verifyEmailInDB($email);
 
-        try {
-            if (!$email == $emailChecked) {
-                throw new Exception("Email not exist in database!<br/>");
-            } else {
-                $email;
-            }
-        } catch (Exception $exc) {
-            die($exc->getMessage());
+        if (!$email == $emailVerify) {
+            die("Email not exist in database!<br/>");
         }
 
         $passVerify = User::passVerifyByEmail($email, $pass);
@@ -40,16 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $newUser = new User();
 
-        $emailChecked = User::verifyEmailInDB($email);
+        $emailVerify = User::verifyEmailInDB($email);
 
-        try {
-            if ($email == $emailChecked) {
-                throw new Exception("Email already exist in database!<br/>");
-            } else {
-                $email;
-            }
-        } catch (Exception $exc) {
-            die($exc->getMessage());
+        if ($email == $emailVerify) {
+            die("Email already exist in database!<br/>");
         }
 
         $newUser->setUserName($name);
@@ -67,5 +55,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 } else {
-    die("<h2>Data Base error, contact with the programmer!<h2/><br/>");
+    die("<h2>Database error, please contact with the programmer!<h2/><br/>");
 }

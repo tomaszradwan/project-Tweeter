@@ -33,6 +33,17 @@ if (array_key_exists(0, $matches)) {
             <?php
             break;
 
+        case "/editUser.php":
+            ?>
+
+            <h1>USER DELETED !</h1>
+
+            <form action =  'indexx.html' method = 'POST'>
+                <input type = 'submit' name = 'delete' value = 'main page'/>
+            </form >
+            <?php
+            break;
+
         default:
             die("<h1>404 ERROR!<h1/>");
     }

@@ -99,7 +99,7 @@ class User {
 
             if ($result == true) {
 
-                $this->id = $connection->conn->insert_id;
+                $this->id = $connection->getConnection()->insert_id;
                 return true;
             }
         }
@@ -115,11 +115,11 @@ class User {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string(trim($idNumber));
+        $id = $connection->getConnection()->real_escape_string(trim($idNumber));
 
         $sql = "SELECT * FROM Users WHERE id=$id";
 
-        $result = $connection->conn->query($sql);
+        $result = $connection->getConnection()->query($sql);
 
         if ($result == true && $result->num_rows == 1) {
             $row = $result->fetch_assoc();
@@ -145,7 +145,7 @@ class User {
 
         $allUsers = array();
 
-        $result = $connection->conn->query($sql);
+        $result = $connection->getConnection()->query($sql);
 
         if ($result == true && $result->num_rows != 0) {
             foreach ($result as $row) {
@@ -171,20 +171,21 @@ class User {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string(trim($idNumber));
+        $id = $connection->getConnection()->real_escape_string(trim($idNumber));
 
-        if ($id > 0 && User::passVerifyById($id, $pass) == true) {
+        if ($id > 0 && User::passVerifyById($id, $pass)) {
 
-            $sql = $connection->conn->prepare("DELETE FROM Users WHERE id= ?");
+            $sql = $connection->getConnection()->prepare("DELETE FROM Users WHERE id= ?");
 
             if ($sql == true) {
                 $sql->bind_param('i', $id);
                 $sql->execute();
+                return true;
             } else {
-                die($connection->conn->error);
+                die($connection->getConnection()->error);
             }
         } else {
-            echo "Brak użytkownika o id $id";
+//            echo "Brak użytkownika o id $id lub podałeś błędne hasło!";
             return false;
         }
     }
@@ -199,7 +200,7 @@ class User {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string($idNumber);
+        $id = $connection->getConnection()->real_escape_string($idNumber);
 
         $sql = "SELECT hashed_password FROM Users WHERE id=$id";
 
@@ -252,7 +253,7 @@ class User {
 
         $sql = "SELECT * FROM `Users` WHERE `email`='$verifyEmail'";
 
-        $result = $connection->conn->query($sql);
+        $result = $connection->getConnection()->query($sql);
 
         if ($result == true && $result->num_rows == 1) {
             $row = $result->fetch_assoc();
@@ -301,8 +302,8 @@ class User {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string(trim($userId));
-        $user = $connection->conn->real_escape_string(trim($userName));
+        $id = $connection->getConnection()->real_escape_string(trim($userId));
+        $user = $connection->getConnection()->real_escape_string(trim($userName));
         $email = filter_var($userEmail, FILTER_VALIDATE_EMAIL);
 
         $sql = "UPDATE `Users` SET `username`= '$user',`email`='$email' WHERE `id` = '$id'";

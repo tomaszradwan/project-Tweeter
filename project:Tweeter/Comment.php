@@ -119,11 +119,11 @@ class Comment {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string(trim($commentId));
+        $id = $connection->getConnection()->real_escape_string(trim($commentId));
 
         $sql = "SELECT * FROM Comment WHERE id=$id";
 
-        $result = $connection->conn->query($sql);
+        $result = $connection->querySql($sql);
 
         if ($result == true && $result->num_rows == 1) {
 
@@ -149,11 +149,11 @@ class Comment {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string(trim($tweetId));
+        $id = $connection->getConnection()->real_escape_string(trim($tweetId));
 
         $sql = "SELECT * FROM Comment WHERE tweetId=$id";
 
-        $result = $connection->conn->query($sql);
+        $result = $connection->querySql($sql);
 
         $allComments = array();
 
@@ -182,13 +182,13 @@ class Comment {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string(trim($userId));
+        $id = $connection->getConnection()->real_escape_string(trim($userId));
 
         $sql = "SELECT * FROM Comment WHERE userId=$id";
 
         $allComments = array();
 
-        $result = $connection->conn->query($sql);
+        $result = $connection->querySql($sql);
 
         if ($result == true && $result->num_rows != 0) {
 
@@ -215,7 +215,7 @@ class Comment {
 
         $conection = new Connection();
 
-        $stmt = $conection->conn->prepare("DELETE FROM Comment WHERE id = ?");
+        $stmt = $conection->getConnection()->prepare("DELETE FROM Comment WHERE id = ?");
         $stmt->bind_param("i", $commentId);
         $stmt->execute();
     }
@@ -235,7 +235,7 @@ class Comment {
 
             if ($result) {
 
-                $this->id = $connection->conn->insert_id;
+                $this->id = $connection->getConnection()->insert_id;
                 return true;
             }
         }

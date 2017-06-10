@@ -26,9 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_POST = array();
 
         unset($_SESSION['userId']);
+
         header('Location: logoutUser_ConfirmCreateUserForm.php');
     } elseif (isset($_POST['editUser'])) {
-        header('Location: editUser.php?userId=' . $userId);
+
+        header('Location: editUser.php');
     } elseif (isset($_POST['textTweet']) && isset($_POST['tweetDate'])) {
 
         $text = $_POST['textTweet'];

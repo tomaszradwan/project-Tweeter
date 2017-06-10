@@ -101,11 +101,11 @@ class Tweet {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string($tweetId);
+        $id = $connection->getConnection()->real_escape_string($tweetId);
 
         $sql = "SELECT * FROM Tweets WHERE id=$id";
 
-        $result = $connection->conn->query($sql);
+        $result = $connection->querySql($sql);
 
         if ($result == true && $result->num_rows == 1) {
             $row = $result->fetch_assoc();
@@ -128,13 +128,13 @@ class Tweet {
 
         $connection = new Connection();
 
-        $id = $connection->conn->real_escape_string($userId);
+        $id = $connection->getConnection()->real_escape_string($userId);
 
         $sql = "SELECT * FROM Tweets WHERE userId=$id";
 
         $allTweets = array();
 
-        $result = $connection->conn->query($sql);
+        $result = $connection->querySql($sql);
 
         if ($result == true && $result->num_rows != 0) {
 
@@ -163,7 +163,7 @@ class Tweet {
 
         $allTweets = array();
 
-        $result = $connection->conn->query($sql);
+        $result = $connection->querySql($sql);
 
         if ($result == true && $result->num_rows != 0) {
             foreach ($result as $row) {
@@ -194,7 +194,7 @@ class Tweet {
 
             if ($result) {
 
-                $this->id = $connection->conn->insert_id;
+                $this->id = $connection->getConnection()->insert_id;
 
                 return true;
             }
@@ -210,7 +210,7 @@ class Tweet {
 
         $conection = new Connection();
 
-        $stmt = $conection->conn->prepare("DELETE FROM Tweets WHERE id = ?");
+        $stmt = $conection->getConnection()->prepare("DELETE FROM Tweets WHERE id = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
     }

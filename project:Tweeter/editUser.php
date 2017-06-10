@@ -6,10 +6,11 @@ include 'User.php';
 
 $userId = $_SESSION['userId'];
 
-$userName = User::loadUserById($_GET['userId'])->getUserName();
-$userEmail = User::loadUserById($_GET['userId'])->getUserEmail();
+$userName = User::loadUserById($userId)->getUserName();
+$userEmail = User::loadUserById($userId)->getUserEmail();
 
-$text = "";
+$textConfirmChanges = "";
+$textWrongPassword = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -23,20 +24,33 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 throw new Exception("ERROR - you cannot update your data!");
             }
         } catch (Exception $ex) {
+
             die($ex->getMessage());
-        } $text = "Changes made in DataBase!";
+        }
+        $textConfirmChanges = "Changes made in DataBase!";
     } elseif (isset($_POST['userAccount'])) {
+
         header('Location: showUserAccount.php');
+    } elseif (isset($_POST['deleteUser'])) {
+
+        $userPassword = $_POST['userPassword'];
+
+        if (User::delete($userId, $userPassword)) {
+
+            unset($_SESSION['userId']);
+
+            header('Location: logoutUser_ConfirmCreateUserForm.php');
+        } else {
+            $textWrongPassword = "Podałeś błędne hasło!<br/>";
+        }
     }
 }
 
+$search = array('%userName%', '%userEmail%', '%textConfirmChanges%', '%textWrongPassword%');
+$replace = array($userName, $userEmail, $textConfirmChanges, $textWrongPassword);
 
-
-$search = array('%userName%', '%userEmail%', '%text%');
-$replace = array("$userName", "$userEmail", "");
-
-$page = file_get_contents("editUserForm.html");
-$page = str_replace($search, $replace, $page);
+$html = file_get_contents("editUserForm.html");
+$page = str_replace($search, $replace, $html);
 
 echo $page;
 ?>
