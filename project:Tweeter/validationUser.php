@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $userId = $newUser->getId();
 
             $_SESSION['userId'] = $userId;
-            header('Location: logoutUser_ConfirmCreateUserForm.php');
+            header('Location: logoutCreateDeleteUserForm.php');
         } else {
             die('An error occurred while writing data to the database!<br/>');
         }
