@@ -106,6 +106,10 @@ class Comment {
         return $this->creationDate;
     }
 
+    /**
+     * 
+     * @return type
+     */
     public function getText() {
         return $this->text;
     }

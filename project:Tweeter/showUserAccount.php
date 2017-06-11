@@ -72,11 +72,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 /*
  * I use require at the end of the code, because in another way(at the beegining of the code) it doesn't work
  * (Undefined variables).
- * I don't use "file_get_contents" because in file "showUserAccountForm.php" I mix html with php to print
- * result(user comment, tweets, data). "File_get_contents" display code as a text without methods or function.
+ * I don't use "file_get_contents" because in file "showUserAccountForm.php" I connected HTML with PHP to show
+ * result(user comment, tweets, data). "File_get_contents" display code as a text without methods or functions.
  * 
  * Question for you Krzysztof:
- * this solution - require at the end of the code - it is good practice or not(probably it's not - I assume)?
+ * this solution - require at the end of the code - it is good practice or not?
  */
 require 'showUserAccountForm.php';
 ?>
@@ -123,24 +123,24 @@ $userTweets = Tweet::getByUserId($userId);
 if ($userTweets != null) {
     foreach ($userTweets as $key => $value):
         ?>
-                                                                                            <tr>
-                                                                                                <td><?php echo $value->getId() ?></td>
-                                                                                                <td><?php echo $value->getUserId() ?></td>
-                                                                                                <td><?php echo $value->getText() ?></td>
-                                                                                                <td><?php echo $value->getCreationDate() ?></td>
-                                                                                                <td><form action="#" method="POST"><button type="submit" name="deleteTweet" value="<?php echo $value->getId() ?>">delete tweet</button></form></td>
+                                                                                                                            <tr>
+                                                                                                                                <td><?php echo $value->getId() ?></td>
+                                                                                                                                <td><?php echo $value->getUserId() ?></td>
+                                                                                                                                <td><?php echo $value->getText() ?></td>
+                                                                                                                                <td><?php echo $value->getCreationDate() ?></td>
+                                                                                                                                <td><form action="#" method="POST"><button type="submit" name="deleteTweet" value="<?php echo $value->getId() ?>">delete tweet</button></form></td>
         <?php
         $commentByTweetId = Comment::getTweetById($value->getId());
 
         if (count($commentByTweetId) > 0) {
             foreach ($commentByTweetId as $key => $value):
                 ?>
-                                                                                                                                                                            <tr>
-                                                                                                                                                                                <td></td>
-                                                                                                                                                                                <td><?php echo $value->getUserId() ?></td>
-                                                                                                                                                                                <td><?php echo $value->getText() ?></td>
-                                                                                                                                                                                <td><?php echo $value->getCreationDate() ?></td>
-                                                                                                                                                                            </tr>
+                                                                                                                                                                                                                                            <tr>
+                                                                                                                                                                                                                                                <td></td>
+                                                                                                                                                                                                                                                <td><?php echo $value->getUserId() ?></td>
+                                                                                                                                                                                                                                                <td><?php echo $value->getText() ?></td>
+                                                                                                                                                                                                                                                <td><?php echo $value->getCreationDate() ?></td>
+                                                                                                                                                                                                                                            </tr>
                 <?php
             endforeach;
         }
@@ -182,16 +182,16 @@ $allCommentsByUser = Comment::getByUserId($userId);
 if ($allCommentsByUser != null) {
     foreach ($allCommentsByUser as $key => $value):
         ?>
-                                                                                        <tr>
-                                                                                        <form method="POST" action="#">
-                                                                                            <td><?php echo $value->getId() ?></td>
-                                                                                            <td><?php echo $value->getUserId() ?></td>
-                                                                                            <td><?php echo $value->getTweetId() ?></td>
-                                                                                            <td><?php echo $value->getText() ?></td>
-                                                                                            <td><?php echo $value->getCreationDate() ?></td>
-                                                                                            <td><form action="#" method="POST"><button type="submit" name="commentDelete" value="<?php echo $value->getId() ?>">delete comment</button></form></td>
-                                                                                        </form>
-                                                                                    </tr>
+                                                                                                                        <tr>
+                                                                                                                        <form method="POST" action="#">
+                                                                                                                            <td><?php echo $value->getId() ?></td>
+                                                                                                                            <td><?php echo $value->getUserId() ?></td>
+                                                                                                                            <td><?php echo $value->getTweetId() ?></td>
+                                                                                                                            <td><?php echo $value->getText() ?></td>
+                                                                                                                            <td><?php echo $value->getCreationDate() ?></td>
+                                                                                                                            <td><form action="#" method="POST"><button type="submit" name="commentDelete" value="<?php echo $value->getId() ?>">delete comment</button></form></td>
+                                                                                                                        </form>
+                                                                                                                    </tr>
         <?php
     endforeach;
 }
@@ -215,17 +215,17 @@ $allTweets = Tweet::loadAllTweets();
 if ($allTweets != null) {
     foreach ($allTweets as $key => $value):
         ?>
-                                                                                    <tr>
-                                                                                    <form method="POST" action="#">
-                                                                                        <td><input type="hidden" name="tweetIdComment" value="<?php echo $value->getId() ?>"><?php echo $value->getId() ?></td>
-                                                                                        <td><input type="hidden" name="userIdComment" value="<?php echo $value->getUserId() ?>"><?php echo $value->getUserId() ?></td>
-                                                                                        <td><input type="hidden" name="text" value="<?php echo $value->getText() ?>"><?php echo $value->getText() ?></td>
-                                                                                        <td><input type="hidden" name="creationDate" value="<?php echo $value->getCreationDate() ?>"><?php echo $value->getCreationDate() ?></td>
-                                                                                        <td><textarea name="commentTweet" placeholder="your message"></textarea></td>
-                                                                                        <td><input name="commentDate" type="text" value="<?php echo $currentDate ?>" readonly/></td>
-                                                                                        <td><input type="submit" name="commentButton" value="comment"></td>
-                                                                                    </form>
-                                                                                </tr>
+                                                                                                                    <tr>
+                                                                                                                    <form method="POST" action="#">
+                                                                                                                        <td><input type="hidden" name="tweetIdComment" value="<?php echo $value->getId() ?>"><?php echo $value->getId() ?></td>
+                                                                                                                        <td><input type="hidden" name="userIdComment" value="<?php echo $value->getUserId() ?>"><?php echo $value->getUserId() ?></td>
+                                                                                                                        <td><input type="hidden" name="text" value="<?php echo $value->getText() ?>"><?php echo $value->getText() ?></td>
+                                                                                                                        <td><input type="hidden" name="creationDate" value="<?php echo $value->getCreationDate() ?>"><?php echo $value->getCreationDate() ?></td>
+                                                                                                                        <td><textarea name="commentTweet" placeholder="your message"></textarea></td>
+                                                                                                                        <td><input name="commentDate" type="text" value="<?php echo $currentDate ?>" readonly/></td>
+                                                                                                                        <td><input type="submit" name="commentButton" value="comment"></td>
+                                                                                                                    </form>
+                                                                                                                </tr>
         <?php
     endforeach;
 }

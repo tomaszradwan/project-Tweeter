@@ -97,7 +97,7 @@ class User {
             $sql = "INSERT INTO `Users`(`username`, `email`, `hashed_password`) VALUES ('$this->username', '$this->email', '$this->hashedPassword')";
             $result = $connection->querySql($sql);
 
-            if ($result == true) {
+            if ($result) {
 
                 $this->id = $connection->getConnection()->insert_id;
                 return true;
@@ -177,7 +177,7 @@ class User {
 
             $sql = $connection->getConnection()->prepare("DELETE FROM Users WHERE id= ?");
 
-            if ($sql == true) {
+            if ($sql) {
                 $sql->bind_param('i', $id);
                 $sql->execute();
                 return true;
@@ -282,7 +282,7 @@ class User {
 
         $result = $connection->querySql($sql);
 
-        if ($result && $result->num_rows == 1) {
+        if ($result == true && $result->num_rows == 1) {
 
             $emailChecked = $result->fetch_assoc()['email'];
 

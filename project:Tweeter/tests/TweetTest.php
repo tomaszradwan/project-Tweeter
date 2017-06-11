@@ -4,20 +4,20 @@ include "Tweet.php";
 
 class TweetTest extends PHPUnit_Framework_TestCase {
 
-    public function testLoadTweetById() {
+    public function testGetById() {
 
-        $id = 81;
+        $id = 82;
 
-        $result = Tweet::loadTweetById($id);
+        $result = Tweet::getById($id);
 
         $this->assertNotEmpty($result);
     }
 
-    public function testLoadAllTweetsByUserId() {
+    public function testGetByUserId() {
 
         $id = 119;
 
-        $result = Tweet::loadAllTweetsByUserId($id);
+        $result = Tweet::getByUserId($id);
 
         $this->assertNotEmpty($result);
     }
