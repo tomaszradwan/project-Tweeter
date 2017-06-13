@@ -4,6 +4,7 @@ session_start();
 
 include "User.php";
 
+//Tomek lepiej na początek daj if ($_SERVER['REQUEST_METHOD'] != 'POST') { die('....'); } i niebedzie duzego if'a
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (isset($_POST['emaillogin']) && isset($_POST['passwordlogin'])) {

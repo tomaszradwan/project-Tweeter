@@ -111,6 +111,7 @@ class User {
      * @param type $idNumber
      * @return \User
      */
+//    nazwa metody ! W klasie Tweet juz poprawiles a tu nie. Zmien na getById
     static public function loadUserById($idNumber) {
 
         $connection = new Connection();
@@ -130,6 +131,7 @@ class User {
             $user->setEmail($row['email']);
             return $user;
         }
+        //nie musisz tak robic. Wystarczy 'return;'
         return null;
     }
 
@@ -137,6 +139,7 @@ class User {
      * 
      * @return type
      */
+//    nazwa metody !
     static public function loadAllUsers() {
 
         $connection = new Connection();
@@ -180,14 +183,19 @@ class User {
             if ($sql) {
                 $sql->bind_param('i', $id);
                 $sql->execute();
+                //wystarczy return $sql->execute();
                 return true;
             } else {
                 die($connection->getConnection()->error);
+                //no z tym Die to ostroznie. To jest bron duzego kalibru. Stosuj Exception zamiast Die
             }
-        } else {
+        }
+        //bez tego elsa to tez ladnie zadziala. Sam return;
+        else {
 //            echo "Brak użytkownika o id $id lub podałeś błędne hasło!";
             return false;
         }
+
     }
 
     /**
@@ -196,6 +204,8 @@ class User {
      * @param type $pass
      * @return boolean
      */
+    //lepiej nazwij zmienne wprost, $userId i $password
+    //nazwa metody verifyById
     static public function passVerifyById($idNumber, $pass) {
 
         $connection = new Connection();
@@ -211,7 +221,7 @@ class User {
         if ($passFromDB != null) {
             return password_verify($pass, $passFromDB);
         } else {
-            return false;
+            return false; //wystarczy return;
         }
     }
 
@@ -221,13 +231,14 @@ class User {
      * @param type $pass
      * @return boolean
      */
+    //nazwa metody verifyByEmail
     static public function passVerifyByEmail($email, $pass) {
 
         $connection = new Connection();
 
         $verifyEmail = filter_var($email, FILTER_VALIDATE_EMAIL);
 
-        $sql = "SELECT `hashed_password` FROM `Users` WHERE `email`='$verifyEmail'";
+        $sql = "SELECT `hashed_password` FROM `Users` WHERE `email`='$verifyEmail'"; //pol i naz tabel nie musisz umieszczac w apostrofach
 
         $result = $connection->querySql($sql);
 
@@ -245,6 +256,7 @@ class User {
      * @param type $email
      * @return \User
      */
+    //nazwa metody getByEmail
     static public function loadUserByEmail($email) {
 
         $connection = new Connection();
@@ -264,7 +276,7 @@ class User {
             $user->setEmail($row['email']);
             return $user;
         }
-        return null;
+        return null; //wystarczy return;
     }
 
     /**
@@ -272,6 +284,7 @@ class User {
      * @param type $email
      * @return boolean
      */
+    //nazwa metody lepsza bedzie poprostu exists
     static public function verifyEmailInDB($email) {
 
         $connection = new Connection();
@@ -288,7 +301,7 @@ class User {
 
             return $emailChecked;
         }
-        return false;
+        return false; //wystarczy return;
     }
 
     /**
@@ -298,6 +311,8 @@ class User {
      * @param type $userEmail
      * @return boolean
      */
+    //nazwa metody update no bo ze user to wiadomow
+    //zmienne $id, $name, $email
     static public function updateUser($userId, $userName, $userEmail) {
 
         $connection = new Connection();
@@ -313,7 +328,7 @@ class User {
         if ($result) {
             return true;
         } else {
-            return false;
+            return false; //zmiast else daj poprostu return;
         }
     }
 

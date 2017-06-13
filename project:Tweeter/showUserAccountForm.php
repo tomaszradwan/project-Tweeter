@@ -129,6 +129,7 @@
 
     <?php
     $allTweets = Tweet::loadAllTweets();
+    //Tomek ten warunek mozna srócić do if ($allTweets), a tak naprawde to jesli $allTweets bedzie puste to petla sie nie wykona wiec ten warunek jest niepotrzebny {
     if ($allTweets != null) {
         foreach ($allTweets as $key => $value):
             ?>

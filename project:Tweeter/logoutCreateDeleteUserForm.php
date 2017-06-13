@@ -1,11 +1,13 @@
 <?php
-$re = '/\/.[a-zA-Z0-9]*\.[a-zA-Z]*/m';
+    $re = '/\/.[a-zA-Z0-9]*\.[a-zA-Z]*/m';
 
-$str = $_SERVER['HTTP_REFERER'];
+    $str = $_SERVER['HTTP_REFERER'];
 
-preg_match($re, $str, $matches);
+    preg_match($re, $str, $matches);
 
-if (array_key_exists(0, $matches)) {
+    if (!array_key_exists(0, $matches)) {
+        die("<h1>ERROR - contact with the programmer!<h1/>");
+    }
 
     $link = $matches[0];
 
@@ -47,7 +49,4 @@ if (array_key_exists(0, $matches)) {
         default:
             die("<h1>404 ERROR!<h1/>");
     }
-} else {
-    die("<h1>ERROR - contact with the programmer!<h1/>");
-}
 ?>
