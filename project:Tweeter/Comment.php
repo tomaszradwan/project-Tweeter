@@ -1,7 +1,7 @@
 <?php
 
 include_once 'Connection.php';
-
+//Ta klasa wyglada najlepiej
 class Comment {
 
     /**
@@ -243,7 +243,7 @@ class Comment {
                 return true;
             }
         }
-        return false;
+        return false; //wystarczy return;
     }
 
 }

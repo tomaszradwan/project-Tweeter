@@ -4,6 +4,8 @@ include_once 'Connection.php';
 
 class Tweet {
 
+
+//  Tomek Zwróc uwagę na PHPDoc '@var type' nie moze byc. Musisz podac wlasciwy typ np: String, Integer, Array
     /**
      *
      * @var type 
@@ -136,6 +138,7 @@ class Tweet {
 
         $result = $connection->querySql($sql);
 
+//        Lepiej daj $result->num_rows > 0, czasmi funkcje lubia dac -1, albo np. Jakis string.
         if ($result == true && $result->num_rows != 0) {
 
             foreach ($result as $row) {
@@ -155,6 +158,7 @@ class Tweet {
      * 
      * @return \Tweet
      */
+//    Ta metoda powinna nazywa sie getAll bez slowa Tweets, bo to wynika z kontekstu w jakiej jest metoda
     static public function loadAllTweets() {
 
         $connection = new Connection();
@@ -199,6 +203,7 @@ class Tweet {
                 return true;
             }
         }
+//wystarczy samo return;
         return false;
     }
 
@@ -206,13 +211,18 @@ class Tweet {
      * 
      * @param type $id
      */
+//    PHPDoc do poprawy
     static public function delete($id) {
 
         $conection = new Connection();
 
         $stmt = $conection->getConnection()->prepare("DELETE FROM Tweets WHERE id = ?");
         $stmt->bind_param("i", $id);
+
+//execute() zwraca tru lub false w zaleznosci czy sie udalo czy nie, dlatego zamien na 'return $stmt->execute()'
         $stmt->execute();
+
+
     }
 
 }

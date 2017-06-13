@@ -14,6 +14,7 @@ class Connection {
          * class Connection I have an error, variables($host, $user, $password, $db) does not exists 
          * (message: Undefined variable).
          */
+        //Ale zapomniales zakomitowac tego pliku
         require 'Parameters.php';
 
         $this->conn = new mysqli($host, $user, $password, $db);
