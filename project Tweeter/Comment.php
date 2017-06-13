@@ -243,7 +243,7 @@ class Comment {
                 return true;
             }
         }
-        return false;
+        return;
     }
 
 }
