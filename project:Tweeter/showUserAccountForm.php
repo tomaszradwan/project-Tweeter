@@ -78,7 +78,6 @@
             <form action="#" method="POST">
                 <td><textarea name="textTweet" placeholder="wpisz wiadomość" rows="8" cols="20" maxlength="140" height="20" size="20" required></textarea></td>
                 <td><input name="tweetDate" type="text" value="<?php echo $currentDate ?>" readonly/></td>
-                <!--<td><input name="tweetDate" type="date"/></td>-->
                 <td><input type="submit" name="newtweet" value="create"/></td>
             </form>
         </tr>
