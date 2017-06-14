@@ -6,31 +6,31 @@ class User {
 
     /**
      *
-     * @var type 
+     * @var Integer 
      */
     private $id = -1;
 
     /**
      *
-     * @var type 
+     * @var String 
      */
     private $username = "";
 
     /**
      *
-     * @var type 
+     * @var String 
      */
     private $hashedPassword = "";
 
     /**
      *
-     * @var type 
+     * @var String 
      */
     private $email = "";
 
     /**
      * 
-     * @param type $newPassword
+     * @param type String
      */
     public function setPassword($newPassword) {
         $this->hashedPassword = password_hash($newPassword, PASSWORD_BCRYPT);
@@ -38,7 +38,7 @@ class User {
 
     /**
      * 
-     * @param type $username
+     * @param type String
      */
     public function setUserName($username) {
         $this->username = $username;
@@ -46,7 +46,7 @@ class User {
 
     /**
      * 
-     * @param type $email
+     * @param type String
      */
     public function setEmail($email) {
         $this->email = $email;
@@ -54,7 +54,7 @@ class User {
 
     /**
      * 
-     * @param type $id
+     * @param type Integer
      */
     public function setId($id) {
         $this->id = $id;
@@ -98,7 +98,6 @@ class User {
             $result = $connection->querySql($sql);
 
             if ($result) {
-
                 $this->id = $connection->getConnection()->insert_id;
                 return true;
             }
@@ -108,14 +107,14 @@ class User {
 
     /**
      * 
-     * @param type $idNumber
+     * @param type Integer
      * @return \User
      */
-    static public function loadUserById($idNumber) {
+    static public function getById($id) {
 
         $connection = new Connection();
 
-        $id = $connection->getConnection()->real_escape_string(trim($idNumber));
+        $id = $connection->getConnection()->real_escape_string(trim($id));
 
         $sql = "SELECT * FROM Users WHERE id=$id";
 
@@ -130,14 +129,14 @@ class User {
             $user->setEmail($row['email']);
             return $user;
         }
-        return null;
+        return;
     }
 
     /**
      * 
      * @return type
      */
-    static public function loadAllUsers() {
+    static public function getAll() {
 
         $connection = new Connection();
 
@@ -147,7 +146,7 @@ class User {
 
         $result = $connection->getConnection()->query($sql);
 
-        if ($result == true && $result->num_rows != 0) {
+        if ($result == true && $result->num_rows > 0) {
             foreach ($result as $row) {
                 $user = new User();
                 $user->setId($row['id']);
@@ -163,44 +162,46 @@ class User {
 
     /**
      * 
-     * @param type $idNumber
-     * @param type $pass
+     * @param $userId type Integer
+     * @param $password type String
      * @return boolean
      */
-    static public function delete($idNumber, $pass) {
+    static public function delete($userId, $password) {
 
         $connection = new Connection();
 
-        $id = $connection->getConnection()->real_escape_string(trim($idNumber));
+        $id = $connection->getConnection()->real_escape_string(trim($userId));
 
-        if ($id > 0 && User::passVerifyById($id, $pass)) {
+        if ($id > 0 && User::verifyById($id, $password)) {
 
             $sql = $connection->getConnection()->prepare("DELETE FROM Users WHERE id= ?");
 
-            if ($sql) {
-                $sql->bind_param('i', $id);
-                $sql->execute();
-                return true;
-            } else {
-                die($connection->getConnection()->error);
+            try {
+
+                if (!$sql) {
+                    throw new Exception($connection->getConnection()->error);
+                } else {
+                    $sql->bind_param('i', $id);
+                    return $sql->execute();
+                }
+            } catch (Exception $ex) {
+                echo $ex->getMessage();
             }
-        } else {
-//            echo "Brak użytkownika o id $id lub podałeś błędne hasło!";
-            return false;
         }
+        return;
     }
 
     /**
      * 
-     * @param type $idNumber
-     * @param type $pass
+     * @param $userId type Integer
+     * @param $password type String
      * @return boolean
      */
-    static public function passVerifyById($idNumber, $pass) {
+    static public function verifyById($userId, $password) {
 
         $connection = new Connection();
 
-        $id = $connection->getConnection()->real_escape_string($idNumber);
+        $id = $connection->getConnection()->real_escape_string($userId);
 
         $sql = "SELECT hashed_password FROM Users WHERE id=$id";
 
@@ -209,19 +210,19 @@ class User {
         $passFromDB = $result->fetch_assoc()['hashed_password'];
 
         if ($passFromDB != null) {
-            return password_verify($pass, $passFromDB);
+            return password_verify($password, $passFromDB);
         } else {
-            return false;
+            return;
         }
     }
 
     /**
      * 
-     * @param type $email
-     * @param type $pass
+     * @param $email type String
+     * @param $password type String
      * @return boolean
      */
-    static public function passVerifyByEmail($email, $pass) {
+    static public function verifyByEmail($email, $password) {
 
         $connection = new Connection();
 
@@ -234,18 +235,18 @@ class User {
         $passFromDB = $result->fetch_assoc()['hashed_password'];
 
         if ($passFromDB != null) {
-            return password_verify($pass, $passFromDB);
+            return password_verify($password, $passFromDB);
         } else {
-            return false;
+            return;
         }
     }
 
     /**
      * 
-     * @param type $email
+     * @param $email type String
      * @return \User
      */
-    static public function loadUserByEmail($email) {
+    static public function getByEmail($email) {
 
         $connection = new Connection();
 
@@ -264,15 +265,15 @@ class User {
             $user->setEmail($row['email']);
             return $user;
         }
-        return null;
+        return;
     }
 
     /**
      * 
-     * @param type $email
+     * @param $email type String
      * @return boolean
      */
-    static public function verifyEmailInDB($email) {
+    static public function exists($email) {
 
         $connection = new Connection();
 
@@ -288,23 +289,23 @@ class User {
 
             return $emailChecked;
         }
-        return false;
+        return;
     }
 
     /**
      * 
-     * @param type $userId
-     * @param type $userName
-     * @param type $userEmail
+     * @param $id type Integer
+     * @param $name type String
+     * @param $email type String
      * @return boolean
      */
-    static public function updateUser($userId, $userName, $userEmail) {
+    static public function updateUser($id, $name, $email) {
 
         $connection = new Connection();
 
-        $id = $connection->getConnection()->real_escape_string(trim($userId));
-        $user = $connection->getConnection()->real_escape_string(trim($userName));
-        $email = filter_var($userEmail, FILTER_VALIDATE_EMAIL);
+        $id = $connection->getConnection()->real_escape_string(trim($id));
+        $user = $connection->getConnection()->real_escape_string(trim($name));
+        $email = filter_var($email, FILTER_VALIDATE_EMAIL);
 
         $sql = "UPDATE `Users` SET `username`= '$user',`email`='$email' WHERE `id` = '$id'";
 
@@ -313,7 +314,7 @@ class User {
         if ($result) {
             return true;
         } else {
-            return false;
+            return;
         }
     }
 

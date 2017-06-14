@@ -38,7 +38,7 @@
             <?php
             $userTweets = Tweet::getByUserId($userId);
 
-            if ($userTweets != null) {
+            if ($userTweets) {
                 foreach ($userTweets as $key => $value):
                     ?>
                     <tr>
@@ -96,7 +96,7 @@
         <?php
         $allCommentsByUser = Comment::getByUserId($userId);
 
-        if ($allCommentsByUser != null) {
+        if ($allCommentsByUser) {
             foreach ($allCommentsByUser as $key => $value):
                 ?>
                 <tr>
@@ -128,8 +128,8 @@
     </tr>
 
     <?php
-    $allTweets = Tweet::loadAllTweets();
-    if ($allTweets != null) {
+    $allTweets = Tweet::getAll();
+    if ($allTweets) {
         foreach ($allTweets as $key => $value):
             ?>
             <tr>

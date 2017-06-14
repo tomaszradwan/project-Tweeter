@@ -6,8 +6,8 @@ include 'User.php';
 
 $userId = $_SESSION['userId'];
 
-$userName = User::loadUserById($userId)->getUserName();
-$userEmail = User::loadUserById($userId)->getUserEmail();
+$userName = User::getById($userId)->getUserName();
+$userEmail = User::getById($userId)->getUserEmail();
 
 $textConfirmChanges = "";
 $textWrongPassword = "";

@@ -6,31 +6,31 @@ class Tweet {
 
     /**
      *
-     * @var type 
+     * @var Integer 
      */
     private $id = -1;
 
     /**
      *
-     * @var type 
+     * @var Integer 
      */
     private $userId = "";
 
     /**
      *
-     * @var type 
+     * @var String 
      */
     private $text = "";
 
     /**
      *
-     * @var type 
+     * @var Integer 
      */
     private $creationDate = "";
 
     /**
      * 
-     * @param type $id
+     * @param type Integer
      */
     public function setId($id) {
         $this->id = $id;
@@ -38,7 +38,7 @@ class Tweet {
 
     /**
      * 
-     * @param type $text
+     * @param type String
      */
     public function setText($text) {
         $this->text = $text;
@@ -46,7 +46,7 @@ class Tweet {
 
     /**
      * 
-     * @param type $userId
+     * @param type Integer
      */
     public function setUserId($userId) {
         $this->userId = $userId;
@@ -54,7 +54,7 @@ class Tweet {
 
     /**
      * 
-     * @param type $creationDate
+     * @param type Integer
      */
     public function setCreationDate($creationDate) {
         $this->creationDate = $creationDate;
@@ -94,14 +94,14 @@ class Tweet {
 
     /**
      * 
-     * @param type $tweetId
+     * @param type Integer
      * @return \Tweet
      */
-    static public function getById($tweetId) {
+    static public function getById($id) {
 
         $connection = new Connection();
 
-        $id = $connection->getConnection()->real_escape_string($tweetId);
+        $id = $connection->getConnection()->real_escape_string($id);
 
         $sql = "SELECT * FROM Tweets WHERE id=$id";
 
@@ -121,7 +121,7 @@ class Tweet {
 
     /**
      * 
-     * @param type $userId
+     * @param type Integer
      * @return \Tweet
      */
     static public function getByUserId($userId) {
@@ -136,7 +136,7 @@ class Tweet {
 
         $result = $connection->querySql($sql);
 
-        if ($result == true && $result->num_rows != 0) {
+        if ($result == true && $result->num_rows > 0) {
 
             foreach ($result as $row) {
                 $userTweet = new Tweet();
@@ -155,7 +155,7 @@ class Tweet {
      * 
      * @return \Tweet
      */
-    static public function loadAllTweets() {
+    static public function getAll() {
 
         $connection = new Connection();
 
@@ -199,12 +199,12 @@ class Tweet {
                 return true;
             }
         }
-        return false;
+        return;
     }
 
     /**
      * 
-     * @param type $id
+     * @param type Integer
      */
     static public function delete($id) {
 
@@ -212,7 +212,7 @@ class Tweet {
 
         $stmt = $conection->getConnection()->prepare("DELETE FROM Tweets WHERE id = ?");
         $stmt->bind_param("i", $id);
-        $stmt->execute();
+        return $stmt->execute();
     }
 
 }

@@ -9,11 +9,7 @@ class Connection {
     private $conn;
 
     public function __construct() {
-        /*
-         * I put 'Parameters.php' file in constructor because when I located before 
-         * class Connection I have an error, variables($host, $user, $password, $db) does not exists 
-         * (message: Undefined variable).
-         */
+
         require 'Parameters.php';
 
         $this->conn = new mysqli($host, $user, $password, $db);
