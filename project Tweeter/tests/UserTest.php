@@ -4,48 +4,48 @@ include "User.php";
 
 class UserTest extends PHPUnit_Framework_TestCase {
 
-    public function testLoadUserById() {
+    public function testGetById() {
 
         $id = 119;
 
-        $result = User::loadUserById($id);
+        $result = User::getById($id);
 
         $this->assertNotEmpty($result);
     }
 
-    public function testLoadAllUsers() {
+    public function testGetAll() {
 
-        $result = count(User::loadAllUsers());
+        $result = count(User::getAll());
 
-        $expectedValue = '16';
+        $expectedValue = '4';
 
         $this->assertEquals($expectedValue, $result);
     }
 
-    public function testPassVerifyByEmail() {
+    public function testVerifyByEmail() {
 
         $email = 'tomek@tomek.pl';
         $pass = "pass123";
 
-        $result = User::passVerifyByEmail($email, $pass);
+        $result = User::verifyByEmail($email, $pass);
 
         $this->assertTrue($result);
     }
 
-    public function testLoadUserByEmail() {
+    public function testGetByEmail() {
 
         $email = 'tomek@tomek.pl';
 
-        $result = User::loadUserByEmail($email);
+        $result = User::getByEmail($email);
 
         $this->assertNotEmpty($result);
     }
 
-    public function testVerifyEmailInDB() {
+    public function testExists() {
 
         $email = 'tomek@tomek.pl';
 
-        $result = User::verifyEmailInDB($email);
+        $result = User::exists($email);
 
         $this->assertSame($email, $result);
     }
@@ -67,7 +67,7 @@ class UserTest extends PHPUnit_Framework_TestCase {
 
         $user->setUserName("test1");
         $user->setPassword("test2");
-        $user->setEmail("test1@tefst.pl");
+        $user->setEmail("test1@tesfst.pl");
 
         $result = $user->saveToDB();
 

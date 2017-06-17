@@ -22,9 +22,9 @@ class TweetTest extends PHPUnit_Framework_TestCase {
         $this->assertNotEmpty($result);
     }
 
-    public function testLoadAllTweets() {
+    public function testgetAll() {
 
-        $result = Tweet::loadAllTweets();
+        $result = Tweet::getAll();
 
         $this->assertNotEmpty($result);
     }

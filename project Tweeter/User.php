@@ -134,7 +134,7 @@ class User {
 
     /**
      * 
-     * @return type
+     * @return 
      */
     static public function getAll() {
 

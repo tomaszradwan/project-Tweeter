@@ -69,15 +69,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-/*
- * I use require at the end of the code, because in another way(at the beegining of the code) it doesn't work
- * (Undefined variables).
- * I don't use "file_get_contents" because in file "showUserAccountForm.php" I connected HTML with PHP to show
- * result(user comment, tweets, data). "File_get_contents" display code as a text without methods or functions.
- * 
- * Question for you Krzysztof:
- * this solution - require at the end of the code - it is good practice or not?
- */
 require 'showUserAccountForm.php';
 ?>
 
