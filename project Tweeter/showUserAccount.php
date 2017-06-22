@@ -9,13 +9,12 @@ include 'Comment.php';
 
 $currentDate = date("Y-m-d");
 
-if (isset($_SESSION['userId'])) {
-
-    $userId = $_SESSION['userId'];
-    $userName = User::getById($userId)->getUserName();
-} else {
+if (!isset($_SESSION['userId'])) {
     die("<h3>User don't exist!<br/></h3>");
 }
+
+$userId = $_SESSION['userId'];
+$userName = User::getById($userId)->getUserName();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 

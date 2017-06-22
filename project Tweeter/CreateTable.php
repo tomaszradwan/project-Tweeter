@@ -31,11 +31,8 @@ $sqlArrayCreateTable = array(
         ",
 );
 
-
-
 foreach ($sqlArrayCreateTable as $value) {
     $result = $connection->querySql($value);
-
 
     if ($result) {
         echo ("Tables created!<br/>");
